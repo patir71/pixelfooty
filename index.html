@@ -104,6 +104,10 @@
             min-height: 24px;
             font-size: 0.95rem;
         }
+
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -124,14 +128,18 @@
 
         <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 Ödül: 25 Puan</div>
 
-        <div class="input-row">
+        <div class="input-row" id="inputSection">
             <input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
             <button id="submitBtn" style="background:#e0f2fe; border-color:#bae6fd;">Tahmin Et</button>
         </div>
 
-        <div class="btn-row">
+        <div class="btn-row" id="actionSection">
             <button id="hintBtn">💡 Netleştir</button>
             <button id="skipBtn">Pas Geç</button>
+        </div>
+
+        <div class="btn-row hidden" id="restartSection">
+            <button id="restartBtn" style="background:#dcfce7; border-color:#bbf7d0; width:100%;">🔄 Yeniden Başla</button>
         </div>
 
         <div class="message" id="message"></div>
@@ -149,10 +157,11 @@
             submit: "Tahmin Et",
             hint: "💡 Netleştir",
             skip: "Pas Geç",
+            restart: "🔄 Yeniden Başla",
             correctMsg: "Tebrikler! Doğru bildin 🎉",
             wrongMsg: "Yanlış! Tekrar dene ❌",
             shortNameMsg: "Lütfen kısaltma yazmayın, takımın tam adını girin! ⚠️",
-            gameOver: "Tebrikler! Tüm takımları bitirdin!"
+            gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆"
         },
         en: {
             title: "⚽ PixelFooty",
@@ -164,23 +173,25 @@
             submit: "Guess",
             hint: "💡 Sharpen",
             skip: "Skip",
+            restart: "🔄 Restart",
             correctMsg: "Correct! Well done 🎉",
             wrongMsg: "Wrong! Try again ❌",
             shortNameMsg: "Please write the full team name, no abbreviations! ⚠️",
-            gameOver: "Congrats! You finished all teams!"
+            gameOver: "Congrats! You finished all teams! 🏆"
         }
     };
 
     let currentLang = 'tr';
 
+    // GitHub'daki tam dosya adlarına göre güncellendi
     const teams = [
         { name: "beşiktaş", file: "bjk.png" },
         { name: "fenerbahçe", file: "fb.png" },
         { name: "galatasaray", file: "gs.png" },
         { name: "trabzonspor", file: "ts.png" },
-        { name: "başakşehir", file: "başşehir.png" },
+        { name: "başakşehir", file: "başakşehir.png" },
         { name: "samsunspor", file: "samsun.png" },
-        { name: "göztepe", file: "goztepe.png" },
+        { name: "göztepe", file: "göztepe.png" },
         { name: "konyaspor", file: "konya.png" },
         { name: "antalyaspor", file: "antalya.png" }
     ];
@@ -197,6 +208,7 @@
     const submitBtn = document.getElementById('submitBtn');
     const hintBtn = document.getElementById('hintBtn');
     const skipBtn = document.getElementById('skipBtn');
+    const restartBtn = document.getElementById('restartBtn');
     const message = document.getElementById('message');
     
     const titleText = document.getElementById('titleText');
@@ -206,25 +218,36 @@
     const statusDisplay = document.getElementById('statusDisplay');
     const langToggle = document.getElementById('langToggle');
 
+    const inputSection = document.getElementById('inputSection');
+    const actionSection = document.getElementById('actionSection');
+    const restartSection = document.getElementById('restartSection');
+
     let currentImage = new Image();
 
     function loadTeam() {
         if (currentIndex >= teams.length) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             message.textContent = translations[currentLang].gameOver;
+            inputSection.classList.add('hidden');
+            actionSection.classList.add('hidden');
+            restartSection.classList.remove('hidden');
+            statusDisplay.textContent = "";
             return;
         }
         
+        inputSection.classList.remove('hidden');
+        actionSection.classList.remove('hidden');
+        restartSection.classList.add('hidden');
+
         isAnswered = false;
         message.textContent = "";
         guessInput.value = "";
         currentStage = 1;
         updateStatusText();
         
-        // Canvas'ı tamamen temizle (eski logonun kalma sorununu çözer)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        currentImage = new Image(); // Yeni görsel nesnesi oluşturarak cache/takılma sorununu önle
+        currentImage = new Image();
         currentImage.src = `logos/${teams[currentIndex].file}`;
         currentImage.onload = () => {
             drawImagePixelated(12);
@@ -283,7 +306,6 @@
             streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
             
-            // Doğru bilince canvas temizlenip net hali çizilir
             drawImagePixelated(1);
 
             currentIndex++;
@@ -309,9 +331,18 @@
 
     skipBtn.addEventListener('click', () => {
         if (isAnswered) return;
-        streak = 0; // Pas geçince seri sıfırlanır (orijinal kural)
+        streak = 0;
         streakDisplay.textContent = translations[currentLang].streak + streak;
         currentIndex++;
+        loadTeam();
+    });
+
+    restartBtn.addEventListener('click', () => {
+        currentIndex = 0;
+        score = 0;
+        streak = 0;
+        scoreDisplay.textContent = translations[currentLang].score + score;
+        streakDisplay.textContent = translations[currentLang].streak + streak;
         loadTeam();
     });
 
@@ -330,8 +361,9 @@
         submitBtn.textContent = t.submit;
         hintBtn.textContent = t.hint;
         skipBtn.textContent = t.skip;
+        restartBtn.textContent = t.restart;
         langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
-        updateStatusText();
+        if (currentIndex < teams.length) updateStatusText();
     }
 
     loadTeam();
