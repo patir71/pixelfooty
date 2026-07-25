@@ -9,100 +9,133 @@
             background-color: #ffffff;
             color: #000000;
             font-family: sans-serif;
-            padding: 10px;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            max-width: 360px;
         }
 
         .header-top {
             display: flex;
             justify-content: space-between;
             width: 100%;
-            max-width: 320px;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .lang-btn {
             background: #f0f0f0;
             border: 1px solid #ccc;
-            padding: 2px 6px;
+            padding: 4px 8px;
             cursor: pointer;
             font-size: 0.8rem;
             border-radius: 4px;
         }
 
-        div {
-            margin-bottom: 5px;
+        .info-text {
+            margin-bottom: 6px;
+            font-size: 0.95rem;
         }
 
         canvas {
             image-rendering: pixelated;
+            width: 100%;
             max-width: 250px;
             height: auto;
             border: 1px solid #ddd;
-            margin: 5px 0;
+            border-radius: 6px;
+            margin: 10px 0;
         }
 
         .input-row {
             display: flex;
             gap: 5px;
-            margin-top: 5px;
+            margin-top: 10px;
+            width: 100%;
         }
 
         input {
-            padding: 5px;
+            flex: 1;
+            padding: 8px;
             font-size: 1rem;
             border: 1px solid #999;
+            border-radius: 4px;
+            outline: none;
         }
 
         button {
-            padding: 5px 10px;
+            padding: 8px 12px;
             cursor: pointer;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background: #f8f8f8;
+            font-weight: bold;
+        }
+
+        button:active {
+            background: #e0e0e0;
         }
 
         .btn-row {
             display: flex;
-            gap: 5px;
-            margin-top: 5px;
+            gap: 8px;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        .btn-row button {
+            flex: 1;
         }
 
         .message {
             font-weight: bold;
-            margin-top: 5px;
-            min-height: 20px;
+            margin-top: 10px;
+            min-height: 24px;
+            font-size: 0.95rem;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-top">
-        <span id="titleText">⚽ PixelFooty</span>
-        <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
+    <div class="game-container">
+        <div class="header-top">
+            <span id="titleText" style="font-weight: bold;">⚽ PixelFooty</span>
+            <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
+        </div>
+        
+        <div class="info-text" id="scoreDisplay">Puan: 0</div>
+        <div class="info-text" id="streakDisplay">Seri: 0</div>
+        <div class="info-text" id="leagueDisplay">🇹🇷 Süper Lig 🟢 Kolay</div>
+
+        <div>
+            <canvas id="pixelCanvas" width="256" height="256"></canvas>
+        </div>
+
+        <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 Ödül: 25 Puan</div>
+
+        <div class="input-row">
+            <input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
+            <button id="submitBtn" style="background:#e0f2fe; border-color:#bae6fd;">Tahmin Et</button>
+        </div>
+
+        <div class="btn-row">
+            <button id="hintBtn">💡 Netleştir</button>
+            <button id="skipBtn">Pas Geç</button>
+        </div>
+
+        <div class="message" id="message"></div>
     </div>
-    
-    <div id="scoreDisplay">Puan: 0</div>
-    <div id="streakDisplay">Seri: 0</div>
-    <div id="leagueDisplay">🇹🇷 Süper Lig 🟢 Kolay</div>
-
-    <div>
-        <canvas id="pixelCanvas" width="256" height="256"></canvas>
-    </div>
-
-    <div id="statusDisplay">Netlik: Aşama 1/4 Ödül: 25 Puan</div>
-
-    <div class="input-row">
-        <input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
-        <button id="submitBtn">Tahmin Et</button>
-    </div>
-
-    <div class="btn-row">
-        <button id="hintBtn">💡 Netleştir</button>
-        <button id="skipBtn">Pas Geç</button>
-    </div>
-
-    <div class="message" id="message"></div>
 
 <script>
     const translations = {
@@ -118,6 +151,7 @@
             skip: "Pas Geç",
             correctMsg: "Tebrikler! Doğru bildin 🎉",
             wrongMsg: "Yanlış! Tekrar dene ❌",
+            shortNameMsg: "Lütfen kısaltma yazmayın, takımın tam adını girin! ⚠️",
             gameOver: "Tebrikler! Tüm takımları bitirdin!"
         },
         en: {
@@ -132,21 +166,23 @@
             skip: "Skip",
             correctMsg: "Correct! Well done 🎉",
             wrongMsg: "Wrong! Try again ❌",
+            shortNameMsg: "Please write the full team name, no abbreviations! ⚠️",
             gameOver: "Congrats! You finished all teams!"
         }
     };
 
     let currentLang = 'tr';
 
+    // Takımların kabul edilecek resmi/tam isimleri
     const teams = [
         { name: "beşiktaş", file: "bjk.png" },
-        { name: "fb", file: "fb.png" },
-        { name: "gs", file: "gs.png" },
-        { name: "ts", file: "ts.png" },
+        { name: "fenerbahçe", file: "fb.png" },
+        { name: "galatasaray", file: "gs.png" },
+        { name: "trabzonspor", file: "ts.png" },
         { name: "başakşehir", file: "başşehir.png" },
-        { name: "samsun", file: "samsun.png" },
+        { name: "samsunspor", file: "samsun.png" },
         { name: "göztepe", file: "goztepe.png" },
-        { name: "konya", file: "konya.png" },
+        { name: "konyaspor", file: "konya.png" },
         { name: "antalyaspor", file: "antalya.png" }
     ];
 
@@ -196,7 +232,6 @@
         ctx.imageSmoothingEnabled = false;
         
         if (pixelSize === 1) {
-            // Orijinal net halini çiz
             ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
             return;
         }
@@ -227,6 +262,13 @@
         let userGuess = guessInput.value.toLowerCase().trim();
         let targetName = teams[currentIndex].name.toLowerCase();
 
+        // Kısaltma kontrolü (gs, fb, bjk, ts gibi kısa girdileri engellemek için)
+        const forbiddenShorts = ["gs", "fb", "bjk", "ts", "bjk", "başak"];
+        if (forbiddenShorts.includes(userGuess) || userGuess.length <= 2) {
+            message.textContent = translations[currentLang].shortNameMsg;
+            return;
+        }
+
         let earnedPoints = Math.max(5, 25 - (currentStage - 1) * 5);
 
         if (userGuess === targetName) {
@@ -237,11 +279,10 @@
             streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
             
-            // Doğru bilince resmi orijinal net haline getirip gösteriyoruz
-            drawImagePixelated(1);
+            drawImagePixelated(1); // Doğru bildikten sonra net hali göster
 
             currentIndex++;
-            setTimeout(loadTeam, 2000); // 2 saniye sonra sonraki takıma geç
+            setTimeout(loadTeam, 2000);
         } else {
             message.textContent = translations[currentLang].wrongMsg;
         }
