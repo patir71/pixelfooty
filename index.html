@@ -167,7 +167,6 @@
 </div>
 
 <script>
-    // Dil Sözlüğü
     const translations = {
         tr: {
             league: "Süper Lig",
@@ -195,16 +194,15 @@
 
     let currentLang = 'tr';
 
-    // 9 Takımlık Liste
     const teams = [
         { name: "galatasaray", file: "gs.png" },
         { name: "fenerbahce", file: "fb.png" },
         { name: "besiktas", file: "bjk.png" },
         { name: "trabzonspor", file: "ts.png" },
         { name: "basaksehir", file: "başşehir.png" },
-        { name: "samsunspor", file: "samsun.png" },
         { name: "antalyaspor", file: "antalya.png" },
         { name: "göztepe", file: "göztepe.png" },
+        { name: "samsunspor", file: "samsun.png" },
         { name: "konyaspor", file: "konya.png" }
     ];
 
@@ -235,7 +233,9 @@
         
         currentImage.src = `logos/${teams[currentIndex].file}`;
         currentImage.onload = () => {
-            drawImagePixelated(4);
+            // Sayı ne kadar büyük olursa piksel blokları o kadar küçülür ve logo o kadar tanınmaz (zor) olur.
+            // Eski halinde 4 idi, şimdi 12 yaparak çok daha detaylı/bulmaca kıvamında pikselledik.
+            drawImagePixelated(12);
         };
     }
 
@@ -275,10 +275,10 @@
     hintBtn.addEventListener('click', () => {
         score = Math.max(0, score - 5);
         scoreText.textContent = translations[currentLang].score + score;
-        drawImagePixelated(2);
+        // İpucuna basınca resmi biraz daha okunabilir seviyeye (6 piksel blok boyutuna) getiriyoruz
+        drawImagePixelated(6);
     });
 
-    // Dil Değiştirme Butonu
     langToggle.addEventListener('click', () => {
         currentLang = currentLang === 'tr' ? 'en' : 'tr';
         updateTexts();
@@ -294,7 +294,6 @@
         langToggle.textContent = t.langBtn;
     }
 
-    // Oyunu başlat
     loadTeam();
 </script>
 
