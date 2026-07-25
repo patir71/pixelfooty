@@ -184,7 +184,7 @@
             <button id="restartBtn" class="center-restart-btn hidden">Yeniden Başla</button>
         </div>
 
-        <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 Ödül: 20 Puan</div>
+        <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 | Ödül: 20 Puan</div>
         
         <!-- Harf İpucu Görüntüleme Alanı -->
         <div class="hint-letters" id="hintLettersDisplay">_ _ _ _</div>
@@ -402,9 +402,9 @@
     function updateStatusText() {
         let earnedReward = Math.max(5, 20 - (currentStage - 1) * 5);
         if (currentLang === 'tr') {
-            statusDisplay.textContent = `Netlik: Aşama ${currentStage}/4 Ödül: ${earnedReward} Puan`;
+            statusDisplay.textContent = `Netlik: Aşama ${currentStage}/4 | Ödül: ${earnedReward} Puan`;
         } else {
-            statusDisplay.textContent = `Clarity: Stage ${currentStage}/4 Reward: ${earnedReward} Pts`;
+            statusDisplay.textContent = `Clarity: Stage ${currentStage}/4 | Reward: ${earnedReward} Pts`;
         }
     }
 
