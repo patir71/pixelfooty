@@ -360,12 +360,10 @@
     }
 
     function cleanTeamName(name) {
-        let cleaned = name.toLowerCase()
+        return name.toLowerCase()
             .trim()
             .replace(/\s+(sk|fk|spor)$/, '')
             .replace(/(sk|fk|spor)$/, '');
-        
-        return removeTurkishChars(cleaned);
     }
 
     function checkGuess() {
@@ -379,15 +377,29 @@
             return;
         }
 
-        let normalizedUser = removeTurkishChars(userGuess);
-        let normalizedTarget = removeTurkishChars(targetName);
+        let isMatch = false;
 
-        let cleanedUser = cleanTeamName(userGuess);
-        let cleanedTarget = cleanTeamName(targetName);
+        if (currentLang === 'tr') {
+            // Türkçe modda tam eşleşme veya eklerin temizlenmiş hali (Türkçe karakter zorunlu)
+            let cleanedUser = cleanTeamName(userGuess);
+            let cleanedTarget = cleanTeamName(targetName);
+            if (userGuess === targetName || cleanedUser === cleanedTarget) {
+                isMatch = true;
+            }
+        } else {
+            // İngilizce modda Türkçe karakterler İngilizceye dönüştürülerek kontrol edilir (besiktas kabul edilir)
+            let normalizedUser = removeTurkishChars(userGuess);
+            let normalizedTarget = removeTurkishChars(targetName);
+            let cleanedUser = cleanTeamName(normalizedUser);
+            let cleanedTarget = cleanTeamName(normalizedTarget);
+            if (normalizedUser === normalizedTarget || cleanedUser === cleanedTarget) {
+                isMatch = true;
+            }
+        }
 
         let earnedPoints = Math.max(5, 25 - (currentStage - 1) * 5);
 
-        if (userGuess === targetName || normalizedUser === normalizedTarget || cleanedUser === cleanedTarget) {
+        if (isMatch) {
             isAnswered = true;
             score += earnedPoints;
             streak += 1;
