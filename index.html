@@ -49,11 +49,6 @@
             font-weight: bold;
         }
 
-        .badges {
-            display: flex;
-            gap: 8px;
-        }
-
         .badge {
             background: rgba(56, 189, 248, 0.1);
             color: var(--accent);
@@ -150,11 +145,9 @@
 
 <div class="container">
     <div class="header">
-        <div class="badges">
-            <span class="badge" id="leagueText">Süper Lig</span>
-            <span class="badge" id="scoreText">Puan: 0</span>
-        </div>
+        <span class="badge" id="leagueText">Süper Lig</span>
         <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
+        <span class="badge" id="scoreText">Puan: 0</span>
     </div>
 
     <div class="canvas-wrapper">
@@ -202,16 +195,16 @@
 
     let currentLang = 'tr';
 
-    // 9 Takımlık Liste (Başakşehir görseli başşehir.png olarak güncellendi)
+    // 9 Takımlık Liste
     const teams = [
         { name: "galatasaray", file: "gs.png" },
         { name: "fenerbahce", file: "fb.png" },
         { name: "besiktas", file: "bjk.png" },
         { name: "trabzonspor", file: "ts.png" },
         { name: "basaksehir", file: "başşehir.png" },
-        { name: "adana demirspor", file: "adana.png" },
+        { name: "samsunspor", file: "samsun.png" },
         { name: "antalyaspor", file: "antalya.png" },
-        { name: "Alanyaspor", file: "alanya.png" },
+        { name: "göztepe", file: "göztepe.png" },
         { name: "konyaspor", file: "konya.png" }
     ];
 
