@@ -96,7 +96,6 @@
             background: #bbf7d0;
         }
 
-        /* 🔤 Harf İpucu Alanı Stili */
         .hint-letters {
             font-family: monospace;
             font-size: 1.2rem;
@@ -134,6 +133,11 @@
 
         button:active {
             background: #e0e0e0;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .btn-row {
@@ -180,7 +184,7 @@
             <button id="restartBtn" class="center-restart-btn hidden">Yeniden Başla</button>
         </div>
 
-        <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 Ödül: 25 Puan</div>
+        <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 Ödül: 20 Puan</div>
         
         <!-- Harf İpucu Görüntüleme Alanı -->
         <div class="hint-letters" id="hintLettersDisplay">_ _ _ _</div>
@@ -192,7 +196,7 @@
 
         <div class="btn-row" id="actionSection">
             <button id="hintBtn">Netleştir (-5 Puan)</button>
-            <button id="letterHintBtn">Harf Ver (-3 Puan)</button>
+            <button id="letterHintBtn">Harf Ver (3/3) (-2 Puan)</button>
             <button id="skipBtn">Pas Geç</button>
         </div>
 
@@ -208,12 +212,13 @@
             placeholder: "Takım adını yazın...",
             submit: "Tahmin Et",
             hint: "Netleştir (-5 Puan)",
-            letterHint: "Harf Ver (-3 Puan)",
+            letterHint: "Harf Ver",
             skip: "Pas Geç",
             restart: "Yeniden Başla",
             correctMsg: "Tebrikler! Doğru bildin 🎉",
             wrongMsg: "Yanlış! Tekrar dene ❌",
             shortNameMsg: "Lütfen tam olarak tahmin edin! ⚠️",
+            noPointsMsg: "Yeterli puanın yok! ⚠️",
             gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆"
         },
         en: {
@@ -223,12 +228,13 @@
             placeholder: "Enter team name...",
             submit: "Guess",
             hint: "Sharpen (-5 Pts)",
-            letterHint: "Letter (-3 Pts)",
+            letterHint: "Letter",
             skip: "Skip",
             restart: "Restart",
             correctMsg: "Correct! Well done 🎉",
             wrongMsg: "Wrong! Try again ❌",
             shortNameMsg: "Please guess properly! ⚠️",
+            noPointsMsg: "Not enough points! ⚠️",
             gameOver: "Congrats! You finished all teams! 🏆"
         }
     };
@@ -263,6 +269,7 @@
     let currentStage = 1;
     let isAnswered = false;
     let revealedMask = [];
+    let remainingLetterHints = 3;
     
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
@@ -328,10 +335,11 @@
         message.textContent = "";
         guessInput.value = "";
         currentStage = 1;
+        remainingLetterHints = 3;
+        updateLetterHintButtonState();
         updateStatusText();
         progressDisplay.textContent = `${currentIndex + 1} / ${shuffledTeams.length}`;
         
-        // Harf maskesini hazırla (Boşluklar açık, harfler kapalı '_')
         let targetName = shuffledTeams[currentIndex].name;
         revealedMask = targetName.split('').map(char => char === ' ' ? ' ' : '_');
         updateHintLettersDisplay();
@@ -358,6 +366,17 @@
         hintLettersDisplay.textContent = revealedMask.join(' ');
     }
 
+    function updateLetterHintButtonState() {
+        let t = translations[currentLang];
+        if (remainingLetterHints > 0) {
+            letterHintBtn.textContent = `${t.letterHint} (${remainingLetterHints}/3) (-2 Puan)`;
+            letterHintBtn.disabled = false;
+        } else {
+            letterHintBtn.textContent = `${t.letterHint} (0/3)`;
+            letterHintBtn.disabled = true;
+        }
+    }
+
     function drawImagePixelated(pixelSize) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.imageSmoothingEnabled = false;
@@ -381,7 +400,7 @@
     }
 
     function updateStatusText() {
-        let earnedReward = Math.max(5, 25 - (currentStage - 1) * 5);
+        let earnedReward = Math.max(5, 20 - (currentStage - 1) * 5);
         if (currentLang === 'tr') {
             statusDisplay.textContent = `Netlik: Aşama ${currentStage}/4 Ödül: ${earnedReward} Puan`;
         } else {
@@ -436,7 +455,7 @@
             }
         }
 
-        let earnedPoints = Math.max(5, 25 - (currentStage - 1) * 5);
+        let earnedPoints = Math.max(5, 20 - (currentStage - 1) * 5);
 
         if (isMatch) {
             isAnswered = true;
@@ -446,7 +465,6 @@
             streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
             
-            // Tam adını göster
             revealedMask = shuffledTeams[currentIndex].name.split('');
             updateHintLettersDisplay();
             drawImagePixelated(1);
@@ -465,6 +483,11 @@
 
     hintBtn.addEventListener('click', () => {
         if (!isAnswered && currentStage < 4) {
+            if (score < 5) {
+                message.textContent = translations[currentLang].noPointsMsg;
+                return;
+            }
+            message.textContent = "";
             score = Math.max(0, score - 5);
             scoreDisplay.textContent = translations[currentLang].score + score;
 
@@ -475,12 +498,16 @@
         }
     });
 
-    // 🔤 Harf Verme Butonu Mantığı
     letterHintBtn.addEventListener('click', () => {
-        if (isAnswered) return;
-        
+        if (isAnswered || remainingLetterHints <= 0) return;
+
+        if (score < 2) {
+            message.textContent = translations[currentLang].noPointsMsg;
+            return;
+        }
+        message.textContent = "";
+
         let targetName = shuffledTeams[currentIndex].name;
-        // Henüz açılmamış gizli harflerin indislerini bul
         let hiddenIndices = [];
         for (let i = 0; i < targetName.length; i++) {
             if (revealedMask[i] === '_') {
@@ -488,17 +515,17 @@
             }
         }
 
-        // Eğer açılacak harf kalmadıysa işlem yapma
         if (hiddenIndices.length === 0) return;
 
-        // Puan düş
-        score = Math.max(0, score - 3);
+        score = Math.max(0, score - 2);
         scoreDisplay.textContent = translations[currentLang].score + score;
 
-        // Rastgele bir kapalı harfi aç
         let randomIndex = hiddenIndices[Math.floor(Math.random() * hiddenIndices.length)];
         revealedMask[randomIndex] = targetName[randomIndex];
         updateHintLettersDisplay();
+
+        remainingLetterHints--;
+        updateLetterHintButtonState();
     });
 
     skipBtn.addEventListener('click', () => {
@@ -526,7 +553,7 @@
         guessInput.placeholder = t.placeholder;
         submitBtn.textContent = t.submit;
         hintBtn.textContent = t.hint;
-        letterHintBtn.textContent = t.letterHint;
+        updateLetterHintButtonState();
         skipBtn.textContent = t.skip;
         restartBtn.textContent = t.restart;
         langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
