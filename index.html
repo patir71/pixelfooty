@@ -44,14 +44,29 @@
         .pixel-logo-container {
             display: flex;
             align-items: center;
+            gap: 10px;
         }
 
-        /* ⚽ Sade ve Tek Başına Duran PF Logosu */
+        /* PF Logosu ve Yanındaki Orijinal Yazı */
         .pixel-logo-img {
-            height: 42px;
+            height: 36px;
             width: auto;
             object-fit: contain;
-            display: block;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #0f172a 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: monospace;
+        }
+
+        .logo-text span {
+            color: #22c55e;
+            -webkit-text-fill-color: #22c55e;
         }
 
         .lang-btn {
@@ -188,8 +203,9 @@
     <div class="game-container">
         <div class="header-top">
             <div class="pixel-logo-container">
-                <!-- Sadece Logo -->
+                <!-- PF Logosu ve Yazı Birlikte -->
                 <img src="logos/pf-logo.png" alt="PixelFooty Logo" class="pixel-logo-img">
+                <div class="logo-text">Pixel<span>Footy</span></div>
             </div>
             <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
         </div>
