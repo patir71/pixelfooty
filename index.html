@@ -48,14 +48,40 @@
             font-size: 0.95rem;
         }
 
+        .canvas-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 250px;
+            margin: 10px 0;
+        }
+
         canvas {
             image-rendering: pixelated;
             width: 100%;
-            max-width: 250px;
             height: auto;
             border: 1px solid #ddd;
             border-radius: 6px;
-            margin: 10px 0;
+        }
+
+        /* Yeniden Başla tuşu canvas alanının tam ortasında belirir */
+        .center-restart-btn {
+            position: absolute;
+            background: #dcfce7;
+            border: 2px solid #bbf7d0;
+            color: #166534;
+            padding: 10px 16px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .center-restart-btn:hover {
+            background: #bbf7d0;
         }
 
         .input-row {
@@ -120,10 +146,12 @@
         
         <div class="info-text" id="scoreDisplay">Puan: 0</div>
         <div class="info-text" id="streakDisplay">Seri: 0</div>
-        <div class="info-text" id="leagueDisplay">🇹🇷 Süper Lig 🟢 Kolay</div>
+        <div class="info-text" id="leagueDisplay">🇹🇷 Süper Lig</div>
 
-        <div>
+        <!-- Canvas ve tam ortasındaki Yeniden Başla butonu için kapsayıcı -->
+        <div class="canvas-wrapper">
             <canvas id="pixelCanvas" width="256" height="256"></canvas>
+            <button id="restartBtn" class="center-restart-btn hidden">🔄 Yeniden Başla</button>
         </div>
 
         <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 Ödül: 25 Puan</div>
@@ -138,10 +166,6 @@
             <button id="skipBtn">Pas Geç</button>
         </div>
 
-        <div class="btn-row hidden" id="restartSection">
-            <button id="restartBtn" style="background:#dcfce7; border-color:#bbf7d0; width:100%;">🔄 Yeniden Başla</button>
-        </div>
-
         <div class="message" id="message"></div>
     </div>
 
@@ -151,7 +175,7 @@
             title: "⚽ PixelFooty",
             score: "Puan: ",
             streak: "Seri: ",
-            league: "🇹🇷 Süper Lig 🟢 Kolay",
+            league: "🇹🇷 Süper Lig",
             status: "Netlik: Aşama 1/4 Ödül: 25 Puan",
             placeholder: "Takım adını yazın...",
             submit: "Tahmin Et",
@@ -160,14 +184,14 @@
             restart: "🔄 Yeniden Başla",
             correctMsg: "Tebrikler! Doğru bildin 🎉",
             wrongMsg: "Yanlış! Tekrar dene ❌",
-            shortNameMsg: "Lütfen kısaltma yazmayın, takımın tam adını girin! ⚠️",
+            shortNameMsg: "Lütfen tam olarak tahmin edin! ⚠️",
             gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆"
         },
         en: {
             title: "⚽ PixelFooty",
             score: "Score: ",
             streak: "Streak: ",
-            league: "🇹🇷 Turkish Super League 🟢 Easy",
+            league: "🇹🇷 Turkish Super League",
             status: "Clarity: Stage 1/4 Reward: 25 Pts",
             placeholder: "Enter team name...",
             submit: "Guess",
@@ -176,24 +200,32 @@
             restart: "🔄 Restart",
             correctMsg: "Correct! Well done 🎉",
             wrongMsg: "Wrong! Try again ❌",
-            shortNameMsg: "Please write the full team name, no abbreviations! ⚠️",
+            shortNameMsg: "Please guess properly! ⚠️",
             gameOver: "Congrats! You finished all teams! 🏆"
         }
     };
 
     let currentLang = 'tr';
 
-    // GitHub'daki tam dosya adlarına göre güncellendi
     const teams = [
         { name: "beşiktaş", file: "bjk.png" },
         { name: "fenerbahçe", file: "fb.png" },
         { name: "galatasaray", file: "gs.png" },
         { name: "trabzonspor", file: "ts.png" },
-        { name: "başakşehir", file: "başakşehir.png" },
+        { name: "başakşehir", file: "basaksehir.png" },
         { name: "samsunspor", file: "samsun.png" },
-        { name: "göztepe", file: "göztepe.png" },
+        { name: "göztepe", file: "goztepe.png" },
         { name: "konyaspor", file: "konya.png" },
-        { name: "antalyaspor", file: "antalya.png" }
+        { name: "alanyaspor", file: "alanyaspor.png" },
+        { name: "amed sk", file: "amedsk.png" },
+        { name: "çaykur rizespor", file: "caykurrizespor.png" },
+        { name: "çorum fk", file: "corumfk.png" },
+        { name: "erzurumspor", file: "erzurumspor.png" },
+        { name: "eyüpspor", file: "eyupspor.png" },
+        { name: "gaziantep fk", file: "gaziantepfk.png" },
+        { name: "gençlerbirliği", file: "genclerbirligi.png" },
+        { name: "kasımpaşa", file: "kasimpasa.png" },
+        { name: "kocaeli", file: "kocaeli.png" }
     ];
 
     let score = 0;
@@ -220,7 +252,6 @@
 
     const inputSection = document.getElementById('inputSection');
     const actionSection = document.getElementById('actionSection');
-    const restartSection = document.getElementById('restartSection');
 
     let currentImage = new Image();
 
@@ -230,14 +261,14 @@
             message.textContent = translations[currentLang].gameOver;
             inputSection.classList.add('hidden');
             actionSection.classList.add('hidden');
-            restartSection.classList.remove('hidden');
+            restartBtn.classList.remove('hidden'); // Buton canvas ortasında belirir
             statusDisplay.textContent = "";
             return;
         }
         
         inputSection.classList.remove('hidden');
         actionSection.classList.remove('hidden');
-        restartSection.classList.add('hidden');
+        restartBtn.classList.add('hidden');
 
         isAnswered = false;
         message.textContent = "";
@@ -285,20 +316,30 @@
         }
     }
 
+    function cleanTeamName(name) {
+        return name.toLowerCase()
+            .trim()
+            .replace(/\s+(sk|fk|spor)$/, '')
+            .replace(/(sk|fk|spor)$/, '');
+    }
+
     function checkGuess() {
         if (isAnswered) return;
         let userGuess = guessInput.value.toLowerCase().trim();
         let targetName = teams[currentIndex].name.toLowerCase();
 
-        const forbiddenShorts = ["gs", "fb", "bjk", "ts", "basak"];
-        if (forbiddenShorts.includes(userGuess) || userGuess.length <= 2) {
+        const forbiddenShorts = ["gs", "fb", "bjk", "ts"];
+        if (forbiddenShorts.includes(userGuess)) {
             message.textContent = translations[currentLang].shortNameMsg;
             return;
         }
 
+        let cleanedUser = cleanTeamName(userGuess);
+        let cleanedTarget = cleanTeamName(targetName);
+
         let earnedPoints = Math.max(5, 25 - (currentStage - 1) * 5);
 
-        if (userGuess === targetName) {
+        if (userGuess === targetName || cleanedUser === cleanedTarget) {
             isAnswered = true;
             score += earnedPoints;
             streak += 1;
