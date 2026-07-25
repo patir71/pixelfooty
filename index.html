@@ -206,8 +206,8 @@
         </div>
 
         <div class="btn-row" id="actionSection">
-            <button id="hintBtn">Netleştir (-5 Puan)</button>
-            <button id="letterHintBtn">Harf Ver (5/5) (-2 Puan)</button>
+            <button id="hintBtn">Netleştir (-10 Puan)</button>
+            <button id="letterHintBtn">Harf Ver (3/3) (-5 Puan)</button>
             <button id="skipBtn">Pas Geç</button>
         </div>
 
@@ -222,7 +222,7 @@
             league: "🇹🇷 Süper Lig",
             placeholder: "Takım adını yazın...",
             submit: "Tahmin Et",
-            hint: "Netleştir (-5 Puan)",
+            hint: "Netleştir (-10 Puan)",
             letterHint: "Harf Ver",
             skip: "Pas Geç",
             restart: "Yeniden Başla",
@@ -230,6 +230,7 @@
             wrongMsg: "Yanlış! Tekrar dene ❌",
             shortNameMsg: "Lütfen tam olarak tahmin edin! ⚠️",
             noPointsMsg: "Yeterli puanın yok! ⚠️",
+            maxLetterMsg: "Daha fazla harf açamazsın! ⚠️",
             gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆"
         },
         en: {
@@ -238,7 +239,7 @@
             league: "🇹🇷 Turkish Super League",
             placeholder: "Enter team name...",
             submit: "Guess",
-            hint: "Sharpen (-5 Pts)",
+            hint: "Sharpen (-10 Pts)",
             letterHint: "Letter",
             skip: "Skip",
             restart: "Restart",
@@ -246,6 +247,7 @@
             wrongMsg: "Wrong! Try again ❌",
             shortNameMsg: "Please guess properly! ⚠️",
             noPointsMsg: "Not enough points! ⚠️",
+            maxLetterMsg: "Cannot reveal more letters! ⚠️",
             gameOver: "Congrats! You finished all teams! 🏆"
         }
     };
@@ -280,7 +282,7 @@
     let currentStage = 1;
     let isAnswered = false;
     let revealedMask = [];
-    let remainingLetterHints = 5;
+    let remainingLetterHints = 3;
     
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
@@ -346,7 +348,7 @@
         message.textContent = "";
         guessInput.value = "";
         currentStage = 1;
-        remainingLetterHints = 5;
+        remainingLetterHints = 3;
         updateLetterHintButtonState();
         updateStatusText();
         progressDisplay.textContent = `${currentIndex + 1} / ${shuffledTeams.length}`;
@@ -380,10 +382,10 @@
     function updateLetterHintButtonState() {
         let t = translations[currentLang];
         if (remainingLetterHints > 0) {
-            letterHintBtn.textContent = `${t.letterHint} (${remainingLetterHints}/5) (-2 Puan)`;
+            letterHintBtn.textContent = `${t.letterHint} (${remainingLetterHints}/3) (-5 Puan)`;
             letterHintBtn.disabled = false;
         } else {
-            letterHintBtn.textContent = `${t.letterHint} (0/5)`;
+            letterHintBtn.textContent = `${t.letterHint} (0/3)`;
             letterHintBtn.disabled = true;
         }
     }
@@ -494,12 +496,12 @@
 
     hintBtn.addEventListener('click', () => {
         if (!isAnswered && currentStage < 4) {
-            if (score < 5) {
+            if (score < 10) {
                 message.textContent = translations[currentLang].noPointsMsg;
                 return;
             }
             message.textContent = "";
-            score = Math.max(0, score - 5);
+            score = Math.max(0, score - 10);
             scoreDisplay.textContent = translations[currentLang].score + score;
 
             currentStage++;
@@ -512,13 +514,21 @@
     letterHintBtn.addEventListener('click', () => {
         if (isAnswered || remainingLetterHints <= 0) return;
 
-        if (score < 2) {
+        let targetName = shuffledTeams[currentIndex].name;
+        let totalLetters = targetName.replace(/\s/g, '').length;
+        let currentlyRevealed = revealedMask.filter(c => c !== '_' && c !== ' ').length;
+        
+        if (currentlyRevealed >= Math.floor(totalLetters / 2)) {
+            message.textContent = translations[currentLang].maxLetterMsg;
+            return;
+        }
+
+        if (score < 5) {
             message.textContent = translations[currentLang].noPointsMsg;
             return;
         }
         message.textContent = "";
 
-        let targetName = shuffledTeams[currentIndex].name;
         let hiddenIndices = [];
         for (let i = 0; i < targetName.length; i++) {
             if (revealedMask[i] === '_') {
@@ -528,7 +538,7 @@
 
         if (hiddenIndices.length === 0) return;
 
-        score = Math.max(0, score - 2);
+        score = Math.max(0, score - 5);
         scoreDisplay.textContent = translations[currentLang].score + score;
 
         let randomIndex = hiddenIndices[Math.floor(Math.random() * hiddenIndices.length)];
