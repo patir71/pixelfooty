@@ -196,7 +196,7 @@
 
         <div class="btn-row" id="actionSection">
             <button id="hintBtn">Netleştir (-5 Puan)</button>
-            <button id="letterHintBtn">Harf Ver (3/3) (-2 Puan)</button>
+            <button id="letterHintBtn">Harf Ver (5/5) (-2 Puan)</button>
             <button id="skipBtn">Pas Geç</button>
         </div>
 
@@ -269,7 +269,7 @@
     let currentStage = 1;
     let isAnswered = false;
     let revealedMask = [];
-    let remainingLetterHints = 3;
+    let remainingLetterHints = 5;
     
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
@@ -335,7 +335,7 @@
         message.textContent = "";
         guessInput.value = "";
         currentStage = 1;
-        remainingLetterHints = 3;
+        remainingLetterHints = 5;
         updateLetterHintButtonState();
         updateStatusText();
         progressDisplay.textContent = `${currentIndex + 1} / ${shuffledTeams.length}`;
@@ -369,10 +369,10 @@
     function updateLetterHintButtonState() {
         let t = translations[currentLang];
         if (remainingLetterHints > 0) {
-            letterHintBtn.textContent = `${t.letterHint} (${remainingLetterHints}/3) (-2 Puan)`;
+            letterHintBtn.textContent = `${t.letterHint} (${remainingLetterHints}/5) (-2 Puan)`;
             letterHintBtn.disabled = false;
         } else {
-            letterHintBtn.textContent = `${t.letterHint} (0/3)`;
+            letterHintBtn.textContent = `${t.letterHint} (0/5)`;
             letterHintBtn.disabled = true;
         }
     }
