@@ -3,32 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PixelFooty</title>
+    <title>PixelFooty 26/27</title>
     <style>
         body {
-            background-color: #f8fafc;
-            color: #0f172a;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Courier New', Courier, monospace;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             justify-content: center;
-            align-items: center;
             min-height: 100vh;
         }
 
         .game-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
+            align-items: flex-start;
             width: 100%;
-            max-width: 380px;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
+            max-width: 400px;
         }
 
         .header-top {
@@ -36,59 +29,39 @@
             justify-content: space-between;
             width: 100%;
             align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #f1f5f9;
-            padding-bottom: 10px;
+            margin-bottom: 5px;
         }
 
-        .pixel-logo-container {
+        /* ⚽ Sadece Logo / İkon Alanı */
+        .header-title {
+            font-size: 1rem;
+            margin: 0;
             display: flex;
             align-items: center;
-            gap: 10px;
         }
 
-        /* PF Logosu ve Yanındaki Orijinal Yazı */
-        .pixel-logo-img {
-            height: 36px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 900;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #0f172a 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-family: monospace;
-        }
-
-        .logo-text span {
-            color: #22c55e;
-            -webkit-text-fill-color: #22c55e;
+        .title-ball {
+            width: 20px;
+            height: 20px;
         }
 
         .lang-btn {
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
-            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #a0a0a0;
+            padding: 2px 8px;
             cursor: pointer;
             font-size: 0.8rem;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: all 0.2s;
+            font-family: inherit;
         }
 
         .lang-btn:hover {
-            background: #e2e8f0;
+            background-color: #e0e0e0;
         }
 
         .info-text {
-            margin-bottom: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #475569;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
         .canvas-wrapper {
@@ -97,100 +70,102 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            max-width: 250px;
-            margin: 10px 0;
+            max-width: 300px;
+            margin: 15px 0;
         }
 
         canvas {
             image-rendering: pixelated;
             width: 100%;
             height: auto;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            background: #f8fafc;
+            border: 1px solid #c0c0c0;
+            background-color: #fcfcfc;
         }
 
         .center-restart-btn {
             position: absolute;
-            background: #22c55e;
-            border: none;
-            color: #ffffff;
-            padding: 12px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
+            background: #e0e0e0;
+            border: 1px solid #a0a0a0;
+            color: #000000;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: normal;
+            border-radius: 0;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
-            transition: transform 0.1s;
+            font-family: inherit;
         }
 
         .center-restart-btn:hover {
-            background: #16a34a;
-            transform: scale(1.05);
+            background: #d0d0d0;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
 
         .input-row {
             display: flex;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 5px;
             width: 100%;
+            margin-bottom: 5px;
         }
 
         input {
             flex: 1;
-            padding: 10px 14px;
-            font-size: 1rem;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
+            padding: 4px;
+            font-size: 0.9rem;
+            border: 1px solid #a0a0a0;
+            border-radius: 0;
             outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input:focus {
-            border-color: #3b82f6;
+            font-family: inherit;
         }
 
         button {
-            padding: 10px 16px;
+            padding: 2px 8px;
             cursor: pointer;
-            border-radius: 8px;
-            border: none;
-            font-weight: bold;
-            transition: background 0.2s;
+            border: 1px solid #a0a0a0;
+            background-color: #f0f0f0;
+            font-size: 0.9rem;
+            font-family: inherit;
         }
 
-        #submitBtn {
-            background: #3b82f6;
-            color: white;
-        }
-
-        #submitBtn:hover {
-            background: #2563eb;
+        button:hover {
+            background-color: #e0e0e0;
         }
 
         .btn-row {
             display: flex;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 5px;
             width: 100%;
         }
 
         .btn-row button {
-            flex: 1;
-            background: #f1f5f9;
-            color: #334155;
-            border: 1px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
         }
-
-        .btn-row button:hover {
-            background: #e2e8f0;
+        
+        .icon {
+            width: 14px;
+            height: 14px;
         }
 
         .message {
             font-weight: bold;
-            margin-top: 12px;
-            min-height: 24px;
-            font-size: 0.95rem;
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .hr-line {
+            border: 0;
+            border-top: 1px solid #e0e0e0;
+            width: 100%;
+            margin: 10px 0;
         }
 
         .hidden {
@@ -202,25 +177,24 @@
 
     <div class="game-container">
         <div class="header-top">
-            <div class="pixel-logo-container">
-                <!-- PF Logosu ve Yazı Birlikte -->
-                <img src="logos/pf-logo.png" alt="PixelFooty Logo" class="pixel-logo-img">
-                <div class="logo-text">Pixel<span>Footy</span></div>
-            </div>
-            <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
+            <h1 class="header-title">
+                <svg class="title-ball" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 2.5a.5.5 0 0 0-1 0v1a.5.5 0 0 0 1 0v-1zm7 0a.5.5 0 1 0-1 0v1a.5.5 0 0 0 1 0v-1zM2 7a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1H2zm11 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zM5.5 11.5a.5.5 0 0 0-1 0v1a.5.5 0 0 0 1 0v-1zm5 0a.5.5 0 1 0-1 0v1a.5.5 0 0 0 1 0v-1zm-2.5-7a2.5 2.5 0 1 1 0 5a2.5 2.5 0 0 1 0-5z" fill="#000"/></svg>
+            </h1>
+            <button class="lang-btn" id="langToggle">TR</button>
         </div>
         
-        <div class="info-text" id="scoreDisplay">Puan: 0</div>
-        <div class="info-text" id="streakDisplay">Seri: 0</div>
-        <div class="info-text" id="progressDisplay">1 / 18</div>
-        <div class="info-text" id="leagueDisplay">🇹🇷 Süper Lig</div>
+        <hr class="hr-line">
+        
+        <p class="info-text" id="scoreDisplay">Puan: 0</p>
+        <p class="info-text" id="streakDisplay">Seri: 0</p>
+        <p class="info-text" id="leagueDisplay">Süper Lig Kolay</p>
 
         <div class="canvas-wrapper">
             <canvas id="pixelCanvas" width="256" height="256"></canvas>
             <button id="restartBtn" class="center-restart-btn hidden">Yeniden Başla</button>
         </div>
 
-        <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 Ödül: 25 Puan</div>
+        <p class="info-text status-row">Netlik: <span id="statusText">Aşama 1/4 Ödül: 25 Puan</span></p>
 
         <div class="input-row" id="inputSection">
             <input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
@@ -228,42 +202,44 @@
         </div>
 
         <div class="btn-row" id="actionSection">
-            <button id="hintBtn">Netleştir (-5 Puan)</button>
+            <button id="hintBtn">
+                <svg class="icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3.5a2.5 2.5 0 0 0 5 0c0-.81-.39-1.52-1-1.97V.5a.5.5 0 0 0-1 0v1.03c-.61.45-1 1.16-1 1.97zM8.5 7V5.5a2.5 2.5 0 0 0-5 0V7a2 2 0 0 0 2 2v4a.5.5 0 0 0 1 0V9a2 2 0 0 0 2-2zM3 14h10v1H3z" fill="#000"/></svg>
+                Netleştir
+            </button>
             <button id="skipBtn">Pas Geç</button>
         </div>
 
+        <hr class="hr-line">
         <div class="message" id="message"></div>
     </div>
 
 <script>
     const translations = {
         tr: {
-            score: "Puan: ",
             streak: "Seri: ",
-            league: "🇹🇷 Süper Lig",
+            league: "Süper Lig Kolay",
             placeholder: "Takım adını yazın...",
             submit: "Tahmin Et",
-            hint: "Netleştir (-5 Puan)",
+            hint: "Netleştir",
             skip: "Pas Geç",
             restart: "Yeniden Başla",
-            correctMsg: "Tebrikler! Doğru bildin 🎉",
-            wrongMsg: "Yanlış! Tekrar dene ❌",
-            shortNameMsg: "Lütfen tam olarak tahmin edin! ⚠️",
-            gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆"
+            correctMsg: "Tebrikler! Doğru bildin",
+            wrongMsg: "Yanlış! Tekrar dene",
+            shortNameMsg: "Lütfen tam olarak tahmin edin!",
+            gameOver: "Tebrikler! Tüm takımları bitirdin!"
         },
         en: {
-            score: "Score: ",
             streak: "Streak: ",
-            league: "🇹🇷 Turkish Super League",
+            league: "Turkish Super League Easy",
             placeholder: "Enter team name...",
             submit: "Guess",
-            hint: "Sharpen (-5 Pts)",
+            hint: "Sharpen",
             skip: "Skip",
             restart: "Restart",
-            correctMsg: "Correct! Well done 🎉",
-            wrongMsg: "Wrong! Try again ❌",
-            shortNameMsg: "Please guess properly! ⚠️",
-            gameOver: "Congrats! You finished all teams! 🏆"
+            correctMsg: "Correct! Well done",
+            wrongMsg: "Wrong! Try again",
+            shortNameMsg: "Please guess properly!",
+            gameOver: "Congrats! You finished all teams!"
         }
     };
 
@@ -308,9 +284,8 @@
     
     const scoreDisplay = document.getElementById('scoreDisplay');
     const streakDisplay = document.getElementById('streakDisplay');
-    const progressDisplay = document.getElementById('progressDisplay');
     const leagueDisplay = document.getElementById('leagueDisplay');
-    const statusDisplay = document.getElementById('statusDisplay');
+    const statusText = document.getElementById('statusText');
     const langToggle = document.getElementById('langToggle');
 
     const inputSection = document.getElementById('inputSection');
@@ -332,8 +307,8 @@
         currentIndex = 0;
         score = 0;
         streak = 0;
-        scoreDisplay.textContent = translations[currentLang].score + score;
-        streakDisplay.textContent = translations[currentLang].streak + streak;
+        scoreDisplay.textContent = "Puan: " + score;
+        streakDisplay.textContent = "Seri: " + streak;
         loadTeam();
     }
 
@@ -343,15 +318,12 @@
             message.textContent = translations[currentLang].gameOver;
             inputSection.classList.add('hidden');
             actionSection.classList.add('hidden');
-            progressDisplay.classList.add('hidden');
-            statusDisplay.textContent = "";
             restartBtn.classList.remove('hidden');
             return;
         }
         
         inputSection.classList.remove('hidden');
         actionSection.classList.remove('hidden');
-        progressDisplay.classList.remove('hidden');
         restartBtn.classList.add('hidden');
 
         isAnswered = false;
@@ -359,7 +331,6 @@
         guessInput.value = "";
         currentStage = 1;
         updateStatusText();
-        progressDisplay.textContent = `${currentIndex + 1} / ${shuffledTeams.length}`;
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -404,9 +375,9 @@
     function updateStatusText() {
         let earnedReward = Math.max(5, 25 - (currentStage - 1) * 5);
         if (currentLang === 'tr') {
-            statusDisplay.textContent = `Netlik: Aşama ${currentStage}/4 Ödül: ${earnedReward} Puan`;
+            statusText.textContent = `Aşama ${currentStage}/4 Ödül: ${earnedReward} Puan`;
         } else {
-            statusDisplay.textContent = `Clarity: Stage ${currentStage}/4 Reward: ${earnedReward} Pts`;
+            statusText.textContent = `Stage ${currentStage}/4 Reward: ${earnedReward} Pts`;
         }
     }
 
@@ -463,7 +434,7 @@
             isAnswered = true;
             score += earnedPoints;
             streak += 1;
-            scoreDisplay.textContent = translations[currentLang].score + score;
+            scoreDisplay.textContent = (currentLang === 'tr' ? "Puan: " : "Score: ") + score;
             streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
             
@@ -484,7 +455,7 @@
     hintBtn.addEventListener('click', () => {
         if (!isAnswered && currentStage < 4) {
             score = Math.max(0, score - 5);
-            scoreDisplay.textContent = translations[currentLang].score + score;
+            scoreDisplay.textContent = (currentLang === 'tr' ? "Puan: " : "Score: ") + score;
 
             currentStage++;
             let pSize = 12 - (currentStage * 2);
@@ -512,15 +483,15 @@
 
     function updateTexts() {
         let t = translations[currentLang];
-        scoreDisplay.textContent = t.score + score;
+        scoreDisplay.textContent = (currentLang === 'tr' ? "Puan: " : "Score: ") + score;
         streakDisplay.textContent = t.streak + streak;
         leagueDisplay.textContent = t.league;
         guessInput.placeholder = t.placeholder;
         submitBtn.textContent = t.submit;
-        hintBtn.textContent = t.hint;
+        hintBtn.lastChild.nodeValue = " " + t.hint;
         skipBtn.textContent = t.skip;
         restartBtn.textContent = t.restart;
-        langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
+        langToggle.textContent = currentLang === 'tr' ? "TR" : "EN";
         if (currentIndex < shuffledTeams.length) updateStatusText();
     }
 
