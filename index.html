@@ -3,189 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Footy - Logo Tahmin</title>
+    <title>PixelFooty</title>
     <style>
-        :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --accent: #38bdf8;
-            --text: #f8fafc;
-            --correct: #22c55e;
-            --wrong: #ef4444;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: #ffffff;
+            color: #000000;
+            font-family: sans-serif;
+            padding: 10px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
-        .container {
-            background-color: var(--card);
-            padding: 25px;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-
-        .header {
+        .header-top {
             display: flex;
             justify-content: space-between;
+            width: 100%;
+            max-width: 320px;
             align-items: center;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .badge {
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            margin-bottom: 5px;
         }
 
         .lang-btn {
-            background: #334155;
-            color: #fff;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 6px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 2px 6px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            border-radius: 4px;
         }
 
-        .canvas-wrapper {
-            background: #0f172a;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        div {
+            margin-bottom: 5px;
         }
 
         canvas {
             image-rendering: pixelated;
-            border-radius: 8px;
-            max-width: 100%;
+            max-width: 250px;
             height: auto;
+            border: 1px solid #ddd;
+            margin: 5px 0;
         }
 
-        .input-group {
+        .input-row {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 5px;
+            margin-top: 5px;
         }
 
         input {
-            flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background: #0f172a;
-            color: #fff;
-            outline: none;
+            padding: 5px;
             font-size: 1rem;
-        }
-
-        input:focus {
-            border-color: var(--accent);
+            border: 1px solid #999;
         }
 
         button {
-            padding: 12px 20px;
-            border-radius: 8px;
-            border: none;
-            background: var(--accent);
-            color: #0f172a;
-            font-weight: bold;
+            padding: 5px 10px;
             cursor: pointer;
-            transition: opacity 0.2s;
         }
 
-        button:active {
-            opacity: 0.8;
-        }
-
-        .actions {
+        .btn-row {
             display: flex;
-            gap: 10px;
-        }
-
-        .btn-secondary {
-            background: #334155;
-            color: #fff;
-            flex: 1;
+            gap: 5px;
+            margin-top: 5px;
         }
 
         .message {
-            margin-top: 15px;
             font-weight: bold;
-            min-height: 24px;
+            margin-top: 5px;
+            min-height: 20px;
         }
-
-        .correct { color: var(--correct); }
-        .wrong { color: var(--wrong); }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <span class="badge" id="leagueText">Süper Lig</span>
+    <div class="header-top">
+        <span id="titleText">⚽ PixelFooty 26/27</span>
         <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
-        <span class="badge" id="scoreText">Puan: 0</span>
     </div>
+    
+    <div id="scoreDisplay">Puan: 0</div>
+    <div id="streakDisplay">Seri: 0</div>
+    <div id="leagueDisplay">🇹🇷 Süper Lig 🟢 Kolay</div>
 
-    <div class="canvas-wrapper">
+    <div>
         <canvas id="pixelCanvas" width="256" height="256"></canvas>
     </div>
 
-    <div class="input-group">
+    <div id="statusDisplay">Netlik: Aşama 1/4 Ödül: 25 Puan</div>
+
+    <div class="input-row">
         <input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
         <button id="submitBtn">Tahmin Et</button>
     </div>
 
-    <div class="actions">
-        <button class="btn-secondary" id="hintBtn">Netleştir (-5)</button>
+    <div class="btn-row">
+        <button id="hintBtn">💡 Netleştir</button>
+        <button id="skipBtn">Pas Geç</button>
     </div>
 
     <div class="message" id="message"></div>
-</div>
+    <div style="margin-top: 15px; font-weight: bold;">PixelFooty 26/27</div>
 
 <script>
     const translations = {
         tr: {
-            league: "Süper Lig",
+            title: "⚽ PixelFooty 26/27",
             score: "Puan: ",
+            streak: "Seri: ",
+            league: "🇹🇷 Süper Lig 🟢 Kolay",
+            status: "Netlik: Aşama 1/4 Ödül: 25 Puan",
             placeholder: "Takım adını yazın...",
             submit: "Tahmin Et",
-            hint: "Netleştir (-5)",
-            langBtn: "EN 🇬🇧",
+            hint: "💡 Netleştir",
+            skip: "Pas Geç",
             correctMsg: "Tebrikler! Doğru bildin 🎉",
             wrongMsg: "Yanlış! Tekrar dene ❌",
             gameOver: "Tebrikler! Tüm takımları bitirdin!"
         },
         en: {
-            league: "Super Lig",
+            title: "⚽ PixelFooty 26/27",
             score: "Score: ",
+            streak: "Streak: ",
+            league: "🇹🇷 Super Lig 🟢 Easy",
+            status: "Clarity: Stage 1/4 Reward: 25 Pts",
             placeholder: "Enter team name...",
             submit: "Guess",
-            hint: "Sharpen (-5)",
-            langBtn: "TR 🇹🇷",
+            hint: "💡 Sharpen",
+            skip: "Skip",
             correctMsg: "Correct! Well done 🎉",
             wrongMsg: "Wrong! Try again ❌",
             gameOver: "Congrats! You finished all teams!"
@@ -194,29 +139,37 @@
 
     let currentLang = 'tr';
 
+    // Senin güncellediğin 9 takım listesi
     const teams = [
-        { name: "galatasaray", file: "gs.png" },
-        { name: "fenerbahce", file: "fb.png" },
-        { name: "besiktas", file: "bjk.png" },
-        { name: "trabzonspor", file: "ts.png" },
-        { name: "basaksehir", file: "başşehir.png" },
-        { name: "antalyaspor", file: "antalya.png" },
-        { name: "göztepe", file: "göztepe.png" },
-        { name: "samsunspor", file: "samsun.png" },
-        { name: "konyaspor", file: "konya.png" }
+        { name: "beşiktaş", file: "bjk.png" },
+        { name: "fb", file: "fb.png" },
+        { name: "gs", file: "gs.png" },
+        { name: "ts", file: "ts.png" },
+        { name: "başakşehir", file: "başşehir.png" },
+        { name: "samsun", file: "samsun.png" },
+        { name: "göztepe", file: "goztepe.png" },
+        { name: "konya", file: "konya.png" },
+        { name: "antalyaspor", file: "antalya.png" }
     ];
 
     let score = 0;
+    let streak = 0;
     let currentIndex = 0;
+    let currentStage = 1;
     
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
     const guessInput = document.getElementById('guessInput');
     const submitBtn = document.getElementById('submitBtn');
     const hintBtn = document.getElementById('hintBtn');
+    const skipBtn = document.getElementById('skipBtn');
     const message = document.getElementById('message');
-    const leagueText = document.getElementById('leagueText');
-    const scoreText = document.getElementById('scoreText');
+    
+    const titleText = document.getElementById('titleText');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const streakDisplay = document.getElementById('streakDisplay');
+    const leagueDisplay = document.getElementById('leagueDisplay');
+    const statusDisplay = document.getElementById('statusDisplay');
     const langToggle = document.getElementById('langToggle');
 
     let currentImage = new Image();
@@ -224,18 +177,17 @@
     function loadTeam() {
         if (currentIndex >= teams.length) {
             message.textContent = translations[currentLang].gameOver;
-            message.className = "message correct";
             return;
         }
         
         message.textContent = "";
         guessInput.value = "";
+        currentStage = 1;
+        updateStatusText();
         
         currentImage.src = `logos/${teams[currentIndex].file}`;
         currentImage.onload = () => {
-            // Sayı ne kadar büyük olursa piksel blokları o kadar küçülür ve logo o kadar tanınmaz (zor) olur.
-            // Eski halinde 4 idi, şimdi 12 yaparak çok daha detaylı/bulmaca kıvamında pikselledik.
-            drawImagePixelated(12);
+            drawImagePixelated(12); // İlk başta çok pikseli (zor)
         };
     }
 
@@ -246,24 +198,40 @@
         let w = canvas.width / pixelSize;
         let h = canvas.height / pixelSize;
         
-        ctx.drawImage(currentImage, 0, 0, w, h);
-        ctx.drawImage(canvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
+        let tempCanvas = document.createElement('canvas');
+        let tempCtx = tempCanvas.getContext('2d');
+        tempCanvas.width = w;
+        tempCanvas.height = h;
+        
+        tempCtx.drawImage(currentImage, 0, 0, w, h);
+        ctx.drawImage(tempCanvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
+    }
+
+    function updateStatusText() {
+        let t = translations[currentLang];
+        if (currentLang === 'tr') {
+            statusDisplay.textContent = `Netlik: Aşama ${currentStage}/4 Ödül: ${Math.max(5, 25 - (currentStage-1)*5)} Puan`;
+        } else {
+            statusDisplay.textContent = `Clarity: Stage ${currentStage}/4 Reward: ${Math.max(5, 25 - (currentStage-1)*5)} Pts`;
+        }
     }
 
     function checkGuess() {
         let userGuess = guessInput.value.toLowerCase().trim();
         let targetName = teams[currentIndex].name.toLowerCase();
 
+        let earnedPoints = Math.max(5, 25 - (currentStage - 1) * 5);
+
         if (userGuess === targetName) {
-            score += 10;
-            scoreText.textContent = translations[currentLang].score + score;
+            score += earnedPoints;
+            streak += 1;
+            scoreDisplay.textContent = translations[currentLang].score + score;
+            streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
-            message.className = "message correct";
             currentIndex++;
             setTimeout(loadTeam, 1500);
         } else {
             message.textContent = translations[currentLang].wrongMsg;
-            message.className = "message wrong";
         }
     }
 
@@ -273,10 +241,19 @@
     });
 
     hintBtn.addEventListener('click', () => {
-        score = Math.max(0, score - 5);
-        scoreText.textContent = translations[currentLang].score + score;
-        // İpucuna basınca resmi biraz daha okunabilir seviyeye (6 piksel blok boyutuna) getiriyoruz
-        drawImagePixelated(6);
+        if (currentStage < 4) {
+            currentStage++;
+            let pSize = 12 - (currentStage * 2); // Her aşamada piksel boyutu küçülerek netleşir
+            drawImagePixelated(Math.max(3, pSize));
+            updateStatusText();
+        }
+    });
+
+    skipBtn.addEventListener('click', () => {
+        streak = 0;
+        streakDisplay.textContent = translations[currentLang].streak + streak;
+        currentIndex++;
+        loadTeam();
     });
 
     langToggle.addEventListener('click', () => {
@@ -286,12 +263,16 @@
 
     function updateTexts() {
         let t = translations[currentLang];
-        leagueText.textContent = t.league;
-        scoreText.textContent = t.score + score;
+        titleText.textContent = t.title;
+        scoreDisplay.textContent = t.score + score;
+        streakDisplay.textContent = t.streak + streak;
+        leagueDisplay.textContent = t.league;
         guessInput.placeholder = t.placeholder;
         submitBtn.textContent = t.submit;
         hintBtn.textContent = t.hint;
-        langToggle.textContent = t.langBtn;
+        skipBtn.textContent = t.skip;
+        langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
+        updateStatusText();
     }
 
     loadTeam();
