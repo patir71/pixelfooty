@@ -210,6 +210,7 @@
 
     function loadTeam() {
         if (currentIndex >= teams.length) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             message.textContent = translations[currentLang].gameOver;
             return;
         }
@@ -220,6 +221,10 @@
         currentStage = 1;
         updateStatusText();
         
+        // Canvas'ı tamamen temizle (eski logonun kalma sorununu çözer)
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        currentImage = new Image(); // Yeni görsel nesnesi oluşturarak cache/takılma sorununu önle
         currentImage.src = `logos/${teams[currentIndex].file}`;
         currentImage.onload = () => {
             drawImagePixelated(12);
@@ -235,14 +240,15 @@
             return;
         }
 
-        let w = canvas.width / pixelSize;
-        let h = canvas.height / pixelSize;
+        let w = Math.max(1, Math.floor(canvas.width / pixelSize));
+        let h = Math.max(1, Math.floor(canvas.height / pixelSize));
         
         let tempCanvas = document.createElement('canvas');
         let tempCtx = tempCanvas.getContext('2d');
         tempCanvas.width = w;
         tempCanvas.height = h;
         
+        tempCtx.imageSmoothingEnabled = false;
         tempCtx.drawImage(currentImage, 0, 0, w, h);
         ctx.drawImage(tempCanvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
     }
@@ -261,7 +267,7 @@
         let userGuess = guessInput.value.toLowerCase().trim();
         let targetName = teams[currentIndex].name.toLowerCase();
 
-        const forbiddenShorts = ["gs", "fb", "bjk", "ts", "bjk", "başak"];
+        const forbiddenShorts = ["gs", "fb", "bjk", "ts", "basak"];
         if (forbiddenShorts.includes(userGuess) || userGuess.length <= 2) {
             message.textContent = translations[currentLang].shortNameMsg;
             return;
@@ -277,6 +283,7 @@
             streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
             
+            // Doğru bilince canvas temizlenip net hali çizilir
             drawImagePixelated(1);
 
             currentIndex++;
@@ -302,7 +309,7 @@
 
     skipBtn.addEventListener('click', () => {
         if (isAnswered) return;
-        streak = 0;
+        streak = 0; // Pas geçince seri sıfırlanır (orijinal kural)
         streakDisplay.textContent = translations[currentLang].streak + streak;
         currentIndex++;
         loadTeam();
