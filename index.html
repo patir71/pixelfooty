@@ -78,7 +78,7 @@
 <body>
 
     <div class="header-top">
-        <span id="titleText">⚽ PixelFooty 26/27</span>
+        <span id="titleText">⚽ PixelFooty</span>
         <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
     </div>
     
@@ -103,12 +103,11 @@
     </div>
 
     <div class="message" id="message"></div>
-    <div style="margin-top: 15px; font-weight: bold;">PixelFooty 26/27</div>
 
 <script>
     const translations = {
         tr: {
-            title: "⚽ PixelFooty 26/27",
+            title: "⚽ PixelFooty",
             score: "Puan: ",
             streak: "Seri: ",
             league: "🇹🇷 Süper Lig 🟢 Kolay",
@@ -122,7 +121,7 @@
             gameOver: "Tebrikler! Tüm takımları bitirdin!"
         },
         en: {
-            title: "⚽ PixelFooty 26/27",
+            title: "⚽ PixelFooty",
             score: "Score: ",
             streak: "Streak: ",
             league: "🇹🇷 Super Lig 🟢 Easy",
@@ -139,7 +138,6 @@
 
     let currentLang = 'tr';
 
-    // Senin güncellediğin 9 takım listesi
     const teams = [
         { name: "beşiktaş", file: "bjk.png" },
         { name: "fb", file: "fb.png" },
@@ -156,6 +154,7 @@
     let streak = 0;
     let currentIndex = 0;
     let currentStage = 1;
+    let isAnswered = false;
     
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
@@ -180,6 +179,7 @@
             return;
         }
         
+        isAnswered = false;
         message.textContent = "";
         guessInput.value = "";
         currentStage = 1;
@@ -187,7 +187,7 @@
         
         currentImage.src = `logos/${teams[currentIndex].file}`;
         currentImage.onload = () => {
-            drawImagePixelated(12); // İlk başta çok pikseli (zor)
+            drawImagePixelated(12);
         };
     }
 
@@ -195,6 +195,12 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.imageSmoothingEnabled = false;
         
+        if (pixelSize === 1) {
+            // Orijinal net halini çiz
+            ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+            return;
+        }
+
         let w = canvas.width / pixelSize;
         let h = canvas.height / pixelSize;
         
@@ -217,19 +223,25 @@
     }
 
     function checkGuess() {
+        if (isAnswered) return;
         let userGuess = guessInput.value.toLowerCase().trim();
         let targetName = teams[currentIndex].name.toLowerCase();
 
         let earnedPoints = Math.max(5, 25 - (currentStage - 1) * 5);
 
         if (userGuess === targetName) {
+            isAnswered = true;
             score += earnedPoints;
             streak += 1;
             scoreDisplay.textContent = translations[currentLang].score + score;
             streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
+            
+            // Doğru bilince resmi orijinal net haline getirip gösteriyoruz
+            drawImagePixelated(1);
+
             currentIndex++;
-            setTimeout(loadTeam, 1500);
+            setTimeout(loadTeam, 2000); // 2 saniye sonra sonraki takıma geç
         } else {
             message.textContent = translations[currentLang].wrongMsg;
         }
@@ -241,15 +253,16 @@
     });
 
     hintBtn.addEventListener('click', () => {
-        if (currentStage < 4) {
+        if (!isAnswered && currentStage < 4) {
             currentStage++;
-            let pSize = 12 - (currentStage * 2); // Her aşamada piksel boyutu küçülerek netleşir
+            let pSize = 12 - (currentStage * 2);
             drawImagePixelated(Math.max(3, pSize));
             updateStatusText();
         }
     });
 
     skipBtn.addEventListener('click', () => {
+        if (isAnswered) return;
         streak = 0;
         streakDisplay.textContent = translations[currentLang].streak + streak;
         currentIndex++;
