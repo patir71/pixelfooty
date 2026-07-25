@@ -380,14 +380,14 @@
         let isMatch = false;
 
         if (currentLang === 'tr') {
-            // Türkçe modda tam eşleşme veya eklerin temizlenmiş hali (Türkçe karakter zorunlu)
+            // Türkçe modda: Türkçe karakterler zorunlu, orijinal isimle veya uzantısız haliyle eşleşmeli
             let cleanedUser = cleanTeamName(userGuess);
             let cleanedTarget = cleanTeamName(targetName);
             if (userGuess === targetName || cleanedUser === cleanedTarget) {
                 isMatch = true;
             }
         } else {
-            // İngilizce modda Türkçe karakterler İngilizceye dönüştürülerek kontrol edilir (besiktas kabul edilir)
+            // İngilizce modda: Türkçe karakterler İngilizceye çevrilerek kontrol edilir (besiktas / basaksehir kabul edilir)
             let normalizedUser = removeTurkishChars(userGuess);
             let normalizedTarget = removeTurkishChars(targetName);
             let cleanedUser = cleanTeamName(normalizedUser);
