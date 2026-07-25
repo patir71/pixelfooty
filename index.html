@@ -44,8 +44,14 @@
         .header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
             font-weight: bold;
+        }
+
+        .badges {
+            display: flex;
+            gap: 8px;
         }
 
         .badge {
@@ -53,6 +59,16 @@
             color: var(--accent);
             padding: 4px 12px;
             border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .lang-btn {
+            background: #334155;
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
             font-size: 0.85rem;
         }
 
@@ -134,8 +150,11 @@
 
 <div class="container">
     <div class="header">
-        <span class="badge" id="leagueText">Süper Lig</span>
-        <span class="badge" id="scoreText">Puan: 0</span>
+        <div class="badges">
+            <span class="badge" id="leagueText">Süper Lig</span>
+            <span class="badge" id="scoreText">Puan: 0</span>
+        </div>
+        <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
     </div>
 
     <div class="canvas-wrapper">
@@ -148,4 +167,143 @@
     </div>
 
     <div class="actions">
-        <button class="btn-secondary" id="hintBtn">Netleştir (-5)
+        <button class="btn-secondary" id="hintBtn">Netleştir (-5)</button>
+    </div>
+
+    <div class="message" id="message"></div>
+</div>
+
+<script>
+    // Dil Sözlüğü
+    const translations = {
+        tr: {
+            league: "Süper Lig",
+            score: "Puan: ",
+            placeholder: "Takım adını yazın...",
+            submit: "Tahmin Et",
+            hint: "Netleştir (-5)",
+            langBtn: "EN 🇬🇧",
+            correctMsg: "Tebrikler! Doğru bildin 🎉",
+            wrongMsg: "Yanlış! Tekrar dene ❌",
+            gameOver: "Tebrikler! Tüm takımları bitirdin!"
+        },
+        en: {
+            league: "Super Lig",
+            score: "Score: ",
+            placeholder: "Enter team name...",
+            submit: "Guess",
+            hint: "Sharpen (-5)",
+            langBtn: "TR 🇹🇷",
+            correctMsg: "Correct! Well done 🎉",
+            wrongMsg: "Wrong! Try again ❌",
+            gameOver: "Congrats! You finished all teams!"
+        }
+    };
+
+    let currentLang = 'tr';
+
+    // 9 Takımlık Liste (Başakşehir görseli başşehir.png olarak güncellendi)
+    const teams = [
+        { name: "galatasaray", file: "gs.png" },
+        { name: "fenerbahce", file: "fb.png" },
+        { name: "besiktas", file: "bjk.png" },
+        { name: "trabzonspor", file: "ts.png" },
+        { name: "basaksehir", file: "başşehir.png" },
+        { name: "adana demirspor", file: "adana.png" },
+        { name: "antalyaspor", file: "antalya.png" },
+        { name: "Alanyaspor", file: "alanya.png" },
+        { name: "konyaspor", file: "konya.png" }
+    ];
+
+    let score = 0;
+    let currentIndex = 0;
+    
+    const canvas = document.getElementById('pixelCanvas');
+    const ctx = canvas.getContext('2d');
+    const guessInput = document.getElementById('guessInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const message = document.getElementById('message');
+    const leagueText = document.getElementById('leagueText');
+    const scoreText = document.getElementById('scoreText');
+    const langToggle = document.getElementById('langToggle');
+
+    let currentImage = new Image();
+
+    function loadTeam() {
+        if (currentIndex >= teams.length) {
+            message.textContent = translations[currentLang].gameOver;
+            message.className = "message correct";
+            return;
+        }
+        
+        message.textContent = "";
+        guessInput.value = "";
+        
+        currentImage.src = `logos/${teams[currentIndex].file}`;
+        currentImage.onload = () => {
+            drawImagePixelated(4);
+        };
+    }
+
+    function drawImagePixelated(pixelSize) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.imageSmoothingEnabled = false;
+        
+        let w = canvas.width / pixelSize;
+        let h = canvas.height / pixelSize;
+        
+        ctx.drawImage(currentImage, 0, 0, w, h);
+        ctx.drawImage(canvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
+    }
+
+    function checkGuess() {
+        let userGuess = guessInput.value.toLowerCase().trim();
+        let targetName = teams[currentIndex].name.toLowerCase();
+
+        if (userGuess === targetName) {
+            score += 10;
+            scoreText.textContent = translations[currentLang].score + score;
+            message.textContent = translations[currentLang].correctMsg;
+            message.className = "message correct";
+            currentIndex++;
+            setTimeout(loadTeam, 1500);
+        } else {
+            message.textContent = translations[currentLang].wrongMsg;
+            message.className = "message wrong";
+        }
+    }
+
+    submitBtn.addEventListener('click', checkGuess);
+    guessInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') checkGuess();
+    });
+
+    hintBtn.addEventListener('click', () => {
+        score = Math.max(0, score - 5);
+        scoreText.textContent = translations[currentLang].score + score;
+        drawImagePixelated(2);
+    });
+
+    // Dil Değiştirme Butonu
+    langToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'tr' ? 'en' : 'tr';
+        updateTexts();
+    });
+
+    function updateTexts() {
+        let t = translations[currentLang];
+        leagueText.textContent = t.league;
+        scoreText.textContent = t.score + score;
+        guessInput.placeholder = t.placeholder;
+        submitBtn.textContent = t.submit;
+        hintBtn.textContent = t.hint;
+        langToggle.textContent = t.langBtn;
+    }
+
+    // Oyunu başlat
+    loadTeam();
+</script>
+
+</body>
+</html>
