@@ -176,7 +176,7 @@
             score: "Puan: ",
             streak: "Seri: ",
             league: "🇹🇷 Süper Lig",
-            placeholder: "Tak/am adını yazın...",
+            placeholder: "Takım adını yazın...",
             submit: "Tahmin Et",
             hint: "Netleştir (-5 Puan)",
             skip: "Pas Geç",
@@ -304,6 +304,15 @@
         currentImage.src = `logos/${shuffledTeams[currentIndex].file}`;
         currentImage.onload = () => {
             drawImagePixelated(12);
+        };
+        currentImage.onerror = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#888";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#fff";
+            ctx.font = "16px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("Logo Bulunamadı", canvas.width / 2, canvas.height / 2);
         };
     }
 
@@ -440,7 +449,7 @@
         hintBtn.textContent = t.hint;
         skipBtn.textContent = t.skip;
         restartBtn.textContent = t.restart;
-        langToggle.textContent = currentLang === 'tr' -> "EN 🇬🇧" : "TR 🇹🇷";
+        langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
         if (currentIndex < shuffledTeams.length) updateStatusText();
     }
 
