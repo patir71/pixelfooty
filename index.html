@@ -158,7 +158,7 @@
             title: "⚽ PixelFooty",
             score: "Score: ",
             streak: "Streak: ",
-            league: "🇹🇷 Super Lig 🟢 Easy",
+            league: "🇹🇷 Turkish Super League 🟢 Easy",
             status: "Clarity: Stage 1/4 Reward: 25 Pts",
             placeholder: "Enter team name...",
             submit: "Guess",
@@ -173,7 +173,6 @@
 
     let currentLang = 'tr';
 
-    // Takımların kabul edilecek resmi/tam isimleri
     const teams = [
         { name: "beşiktaş", file: "bjk.png" },
         { name: "fenerbahçe", file: "fb.png" },
@@ -262,7 +261,6 @@
         let userGuess = guessInput.value.toLowerCase().trim();
         let targetName = teams[currentIndex].name.toLowerCase();
 
-        // Kısaltma kontrolü (gs, fb, bjk, ts gibi kısa girdileri engellemek için)
         const forbiddenShorts = ["gs", "fb", "bjk", "ts", "bjk", "başak"];
         if (forbiddenShorts.includes(userGuess) || userGuess.length <= 2) {
             message.textContent = translations[currentLang].shortNameMsg;
@@ -279,7 +277,7 @@
             streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
             
-            drawImagePixelated(1); // Doğru bildikten sonra net hali göster
+            drawImagePixelated(1);
 
             currentIndex++;
             setTimeout(loadTeam, 2000);
