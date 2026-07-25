@@ -6,9 +6,9 @@
     <title>PixelFooty</title>
     <style>
         body {
-            background-color: #ffffff;
-            color: #000000;
-            font-family: sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -23,7 +23,12 @@
             align-items: center;
             text-align: center;
             width: 100%;
-            max-width: 360px;
+            max-width: 380px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
         }
 
         .header-top {
@@ -31,21 +36,44 @@
             justify-content: space-between;
             width: 100%;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+
+        .pixel-logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        /* ⚽ Sade ve Tek Başına Duran PF Logosu */
+        .pixel-logo-img {
+            height: 42px;
+            width: auto;
+            object-fit: contain;
+            display: block;
         }
 
         .lang-btn {
-            background: #f0f0f0;
-            border: 1px solid #ccc;
-            padding: 4px 8px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 5px 10px;
             cursor: pointer;
             font-size: 0.8rem;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover {
+            background: #e2e8f0;
         }
 
         .info-text {
             margin-bottom: 6px;
             font-size: 0.95rem;
+            font-weight: 600;
+            color: #475569;
         }
 
         .canvas-wrapper {
@@ -62,70 +90,90 @@
             image-rendering: pixelated;
             width: 100%;
             height: auto;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
         }
 
         .center-restart-btn {
             position: absolute;
-            background: #dcfce7;
-            border: 2px solid #bbf7d0;
-            color: #166534;
-            padding: 10px 16px;
+            background: #22c55e;
+            border: none;
+            color: #ffffff;
+            padding: 12px 20px;
             font-size: 1rem;
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+            transition: transform 0.1s;
         }
 
         .center-restart-btn:hover {
-            background: #bbf7d0;
+            background: #16a34a;
+            transform: scale(1.05);
         }
 
         .input-row {
             display: flex;
-            gap: 5px;
+            gap: 8px;
             margin-top: 10px;
             width: 100%;
         }
 
         input {
             flex: 1;
-            padding: 8px;
+            padding: 10px 14px;
             font-size: 1rem;
-            border: 1px solid #999;
-            border-radius: 4px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
             outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: #3b82f6;
         }
 
         button {
-            padding: 8px 12px;
+            padding: 10px 16px;
             cursor: pointer;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            background: #f8f8f8;
+            border-radius: 8px;
+            border: none;
             font-weight: bold;
+            transition: background 0.2s;
         }
 
-        button:active {
-            background: #e0e0e0;
+        #submitBtn {
+            background: #3b82f6;
+            color: white;
+        }
+
+        #submitBtn:hover {
+            background: #2563eb;
         }
 
         .btn-row {
             display: flex;
             gap: 8px;
-            margin-top: 8px;
+            margin-top: 10px;
             width: 100%;
         }
 
         .btn-row button {
             flex: 1;
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-row button:hover {
+            background: #e2e8f0;
         }
 
         .message {
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 12px;
             min-height: 24px;
             font-size: 0.95rem;
         }
@@ -139,7 +187,10 @@
 
     <div class="game-container">
         <div class="header-top">
-            <span id="titleText" style="font-weight: bold;">⚽ PixelFooty</span>
+            <div class="pixel-logo-container">
+                <!-- Sadece Logo -->
+                <img src="logos/pf-logo.png" alt="PixelFooty Logo" class="pixel-logo-img">
+            </div>
             <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
         </div>
         
@@ -148,7 +199,6 @@
         <div class="info-text" id="progressDisplay">1 / 18</div>
         <div class="info-text" id="leagueDisplay">🇹🇷 Süper Lig</div>
 
-        <!-- Canvas ve tam ortasındaki Yeniden Başla butonu -->
         <div class="canvas-wrapper">
             <canvas id="pixelCanvas" width="256" height="256"></canvas>
             <button id="restartBtn" class="center-restart-btn hidden">Yeniden Başla</button>
@@ -158,7 +208,7 @@
 
         <div class="input-row" id="inputSection">
             <input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
-            <button id="submitBtn" style="background:#e0f2fe; border-color:#bae6fd;">Tahmin Et</button>
+            <button id="submitBtn">Tahmin Et</button>
         </div>
 
         <div class="btn-row" id="actionSection">
@@ -172,7 +222,6 @@
 <script>
     const translations = {
         tr: {
-            title: "⚽ PixelFooty",
             score: "Puan: ",
             streak: "Seri: ",
             league: "🇹🇷 Süper Lig",
@@ -187,7 +236,6 @@
             gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆"
         },
         en: {
-            title: "⚽ PixelFooty",
             score: "Score: ",
             streak: "Streak: ",
             league: "🇹🇷 Turkish Super League",
@@ -242,7 +290,6 @@
     const restartBtn = document.getElementById('restartBtn');
     const message = document.getElementById('message');
     
-    const titleText = document.getElementById('titleText');
     const scoreDisplay = document.getElementById('scoreDisplay');
     const streakDisplay = document.getElementById('streakDisplay');
     const progressDisplay = document.getElementById('progressDisplay');
@@ -339,7 +386,6 @@
     }
 
     function updateStatusText() {
-        let t = translations[currentLang];
         let earnedReward = Math.max(5, 25 - (currentStage - 1) * 5);
         if (currentLang === 'tr') {
             statusDisplay.textContent = `Netlik: Aşama ${currentStage}/4 Ödül: ${earnedReward} Puan`;
@@ -380,14 +426,12 @@
         let isMatch = false;
 
         if (currentLang === 'tr') {
-            // Türkçe modda: Türkçe karakterler zorunlu, orijinal isimle veya uzantısız haliyle eşleşmeli
             let cleanedUser = cleanTeamName(userGuess);
             let cleanedTarget = cleanTeamName(targetName);
             if (userGuess === targetName || cleanedUser === cleanedTarget) {
                 isMatch = true;
             }
         } else {
-            // İngilizce modda: Türkçe karakterler İngilizceye çevrilerek kontrol edilir (besiktas / basaksehir kabul edilir)
             let normalizedUser = removeTurkishChars(userGuess);
             let normalizedTarget = removeTurkishChars(targetName);
             let cleanedUser = cleanTeamName(normalizedUser);
@@ -452,7 +496,6 @@
 
     function updateTexts() {
         let t = translations[currentLang];
-        titleText.textContent = t.title;
         scoreDisplay.textContent = t.score + score;
         streakDisplay.textContent = t.streak + streak;
         leagueDisplay.textContent = t.league;
