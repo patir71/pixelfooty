@@ -176,7 +176,7 @@
             score: "Puan: ",
             streak: "Seri: ",
             league: "🇹🇷 Süper Lig",
-            placeholder: "Takım adını yazın...",
+            placeholder: "Tak/am adını yazın...",
             submit: "Tahmin Et",
             hint: "Netleştir (-5 Puan)",
             skip: "Pas Geç",
@@ -339,11 +339,24 @@
         }
     }
 
+    function removeTurkishChars(str) {
+        return str
+            .replace(/ğ/g, 'g')
+            .replace(/ü/g, 'u')
+            .replace(/ş/g, 's')
+            .replace(/ı/g, 'i')
+            .replace(/i̇/g, 'i')
+            .replace(/ö/g, 'o')
+            .replace(/ç/g, 'c');
+    }
+
     function cleanTeamName(name) {
-        return name.toLowerCase()
+        let cleaned = name.toLowerCase()
             .trim()
             .replace(/\s+(sk|fk|spor)$/, '')
             .replace(/(sk|fk|spor)$/, '');
+        
+        return removeTurkishChars(cleaned);
     }
 
     function checkGuess() {
@@ -357,12 +370,15 @@
             return;
         }
 
+        let normalizedUser = removeTurkishChars(userGuess);
+        let normalizedTarget = removeTurkishChars(targetName);
+
         let cleanedUser = cleanTeamName(userGuess);
         let cleanedTarget = cleanTeamName(targetName);
 
         let earnedPoints = Math.max(5, 25 - (currentStage - 1) * 5);
 
-        if (userGuess === targetName || cleanedUser === cleanedTarget) {
+        if (userGuess === targetName || normalizedUser === normalizedTarget || cleanedUser === cleanedTarget) {
             isAnswered = true;
             score += earnedPoints;
             streak += 1;
@@ -424,7 +440,7 @@
         hintBtn.textContent = t.hint;
         skipBtn.textContent = t.skip;
         restartBtn.textContent = t.restart;
-        langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
+        langToggle.textContent = currentLang === 'tr' -> "EN 🇬🇧" : "TR 🇹🇷";
         if (currentIndex < shuffledTeams.length) updateStatusText();
     }
 
