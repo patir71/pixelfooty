@@ -66,7 +66,6 @@
             border-radius: 6px;
         }
 
-        /* Yeniden Başla tuşu canvas alanının tam ortasında belirir */
         .center-restart-btn {
             position: absolute;
             background: #dcfce7;
@@ -146,9 +145,10 @@
         
         <div class="info-text" id="scoreDisplay">Puan: 0</div>
         <div class="info-text" id="streakDisplay">Seri: 0</div>
+        <div class="info-text" id="progressDisplay">1 / 18</div>
         <div class="info-text" id="leagueDisplay">🇹🇷 Süper Lig</div>
 
-        <!-- Canvas ve tam ortasındaki Yeniden Başla butonu için kapsayıcı -->
+        <!-- Canvas ve tam ortasındaki Yeniden Başla butonu -->
         <div class="canvas-wrapper">
             <canvas id="pixelCanvas" width="256" height="256"></canvas>
             <button id="restartBtn" class="center-restart-btn hidden">🔄 Yeniden Başla</button>
@@ -230,6 +230,7 @@
 
     let score = 0;
     let streak = 0;
+    let shuffledTeams = [];
     let currentIndex = 0;
     let currentStage = 1;
     let isAnswered = false;
@@ -246,6 +247,7 @@
     const titleText = document.getElementById('titleText');
     const scoreDisplay = document.getElementById('scoreDisplay');
     const streakDisplay = document.getElementById('streakDisplay');
+    const progressDisplay = document.getElementById('progressDisplay');
     const leagueDisplay = document.getElementById('leagueDisplay');
     const statusDisplay = document.getElementById('statusDisplay');
     const langToggle = document.getElementById('langToggle');
@@ -255,19 +257,41 @@
 
     let currentImage = new Image();
 
+    // Takımları rastgele karıştırma fonksiyonu
+    function shuffleArray(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function initGame() {
+        shuffledTeams = shuffleArray(teams);
+        currentIndex = 0;
+        score = 0;
+        streak = 0;
+        scoreDisplay.textContent = translations[currentLang].score + score;
+        streakDisplay.textContent = translations[currentLang].streak + streak;
+        loadTeam();
+    }
+
     function loadTeam() {
-        if (currentIndex >= teams.length) {
+        if (currentIndex >= shuffledTeams.length) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             message.textContent = translations[currentLang].gameOver;
             inputSection.classList.add('hidden');
             actionSection.classList.add('hidden');
-            restartBtn.classList.remove('hidden'); // Buton canvas ortasında belirir
+            progressDisplay.classList.add('hidden');
             statusDisplay.textContent = "";
+            restartBtn.classList.remove('hidden');
             return;
         }
         
         inputSection.classList.remove('hidden');
         actionSection.classList.remove('hidden');
+        progressDisplay.classList.remove('hidden');
         restartBtn.classList.add('hidden');
 
         isAnswered = false;
@@ -275,11 +299,12 @@
         guessInput.value = "";
         currentStage = 1;
         updateStatusText();
+        progressDisplay.textContent = `${currentIndex + 1} / ${shuffledTeams.length}`;
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         currentImage = new Image();
-        currentImage.src = `logos/${teams[currentIndex].file}`;
+        currentImage.src = `logos/${shuffledTeams[currentIndex].file}`;
         currentImage.onload = () => {
             drawImagePixelated(12);
         };
@@ -326,7 +351,7 @@
     function checkGuess() {
         if (isAnswered) return;
         let userGuess = guessInput.value.toLowerCase().trim();
-        let targetName = teams[currentIndex].name.toLowerCase();
+        let targetName = shuffledTeams[currentIndex].name.toLowerCase();
 
         const forbiddenShorts = ["gs", "fb", "bjk", "ts"];
         if (forbiddenShorts.includes(userGuess)) {
@@ -379,12 +404,7 @@
     });
 
     restartBtn.addEventListener('click', () => {
-        currentIndex = 0;
-        score = 0;
-        streak = 0;
-        scoreDisplay.textContent = translations[currentLang].score + score;
-        streakDisplay.textContent = translations[currentLang].streak + streak;
-        loadTeam();
+        initGame();
     });
 
     langToggle.addEventListener('click', () => {
@@ -404,10 +424,11 @@
         skipBtn.textContent = t.skip;
         restartBtn.textContent = t.restart;
         langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
-        if (currentIndex < teams.length) updateStatusText();
+        if (currentIndex < shuffledTeams.length) updateStatusText();
     }
 
-    loadTeam();
+    // Oyunu başlat
+    initGame();
 </script>
 
 </body>
