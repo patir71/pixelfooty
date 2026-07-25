@@ -34,7 +34,6 @@
             margin-bottom: 8px;
         }
 
-        /* 🖼️ Logo Alanı (Boyutu büyütüldü) */
         .header-logo {
             display: flex;
             align-items: center;
@@ -97,10 +96,21 @@
             background: #bbf7d0;
         }
 
+        /* 🔤 Harf İpucu Alanı Stili */
+        .hint-letters {
+            font-family: monospace;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            margin: 6px 0;
+            color: #444;
+            min-height: 24px;
+            font-weight: bold;
+        }
+
         .input-row {
             display: flex;
             gap: 5px;
-            margin-top: 10px;
+            margin-top: 5px;
             width: 100%;
         }
 
@@ -171,6 +181,9 @@
         </div>
 
         <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 Ödül: 25 Puan</div>
+        
+        <!-- Harf İpucu Görüntüleme Alanı -->
+        <div class="hint-letters" id="hintLettersDisplay">_ _ _ _</div>
 
         <div class="input-row" id="inputSection">
             <input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
@@ -179,6 +192,7 @@
 
         <div class="btn-row" id="actionSection">
             <button id="hintBtn">Netleştir (-5 Puan)</button>
+            <button id="letterHintBtn">Harf Ver (-3 Puan)</button>
             <button id="skipBtn">Pas Geç</button>
         </div>
 
@@ -194,6 +208,7 @@
             placeholder: "Takım adını yazın...",
             submit: "Tahmin Et",
             hint: "Netleştir (-5 Puan)",
+            letterHint: "Harf Ver (-3 Puan)",
             skip: "Pas Geç",
             restart: "Yeniden Başla",
             correctMsg: "Tebrikler! Doğru bildin 🎉",
@@ -208,6 +223,7 @@
             placeholder: "Enter team name...",
             submit: "Guess",
             hint: "Sharpen (-5 Pts)",
+            letterHint: "Letter (-3 Pts)",
             skip: "Skip",
             restart: "Restart",
             correctMsg: "Correct! Well done 🎉",
@@ -246,12 +262,14 @@
     let currentIndex = 0;
     let currentStage = 1;
     let isAnswered = false;
+    let revealedMask = [];
     
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
     const guessInput = document.getElementById('guessInput');
     const submitBtn = document.getElementById('submitBtn');
     const hintBtn = document.getElementById('hintBtn');
+    const letterHintBtn = document.getElementById('letterHintBtn');
     const skipBtn = document.getElementById('skipBtn');
     const restartBtn = document.getElementById('restartBtn');
     const message = document.getElementById('message');
@@ -261,6 +279,7 @@
     const progressDisplay = document.getElementById('progressDisplay');
     const leagueDisplay = document.getElementById('leagueDisplay');
     const statusDisplay = document.getElementById('statusDisplay');
+    const hintLettersDisplay = document.getElementById('hintLettersDisplay');
     const langToggle = document.getElementById('langToggle');
 
     const inputSection = document.getElementById('inputSection');
@@ -295,6 +314,7 @@
             actionSection.classList.add('hidden');
             progressDisplay.classList.add('hidden');
             statusDisplay.textContent = "";
+            hintLettersDisplay.textContent = "";
             restartBtn.classList.remove('hidden');
             return;
         }
@@ -310,6 +330,11 @@
         currentStage = 1;
         updateStatusText();
         progressDisplay.textContent = `${currentIndex + 1} / ${shuffledTeams.length}`;
+        
+        // Harf maskesini hazırla (Boşluklar açık, harfler kapalı '_')
+        let targetName = shuffledTeams[currentIndex].name;
+        revealedMask = targetName.split('').map(char => char === ' ' ? ' ' : '_');
+        updateHintLettersDisplay();
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -327,6 +352,10 @@
             ctx.textAlign = "center";
             ctx.fillText("Logo Bulunamadı", canvas.width / 2, canvas.height / 2);
         };
+    }
+
+    function updateHintLettersDisplay() {
+        hintLettersDisplay.textContent = revealedMask.join(' ');
     }
 
     function drawImagePixelated(pixelSize) {
@@ -417,6 +446,9 @@
             streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
             
+            // Tam adını göster
+            revealedMask = shuffledTeams[currentIndex].name.split('');
+            updateHintLettersDisplay();
             drawImagePixelated(1);
 
             currentIndex++;
@@ -441,6 +473,32 @@
             drawImagePixelated(Math.max(3, pSize));
             updateStatusText();
         }
+    });
+
+    // 🔤 Harf Verme Butonu Mantığı
+    letterHintBtn.addEventListener('click', () => {
+        if (isAnswered) return;
+        
+        let targetName = shuffledTeams[currentIndex].name;
+        // Henüz açılmamış gizli harflerin indislerini bul
+        let hiddenIndices = [];
+        for (let i = 0; i < targetName.length; i++) {
+            if (revealedMask[i] === '_') {
+                hiddenIndices.push(i);
+            }
+        }
+
+        // Eğer açılacak harf kalmadıysa işlem yapma
+        if (hiddenIndices.length === 0) return;
+
+        // Puan düş
+        score = Math.max(0, score - 3);
+        scoreDisplay.textContent = translations[currentLang].score + score;
+
+        // Rastgele bir kapalı harfi aç
+        let randomIndex = hiddenIndices[Math.floor(Math.random() * hiddenIndices.length)];
+        revealedMask[randomIndex] = targetName[randomIndex];
+        updateHintLettersDisplay();
     });
 
     skipBtn.addEventListener('click', () => {
@@ -468,6 +526,7 @@
         guessInput.placeholder = t.placeholder;
         submitBtn.textContent = t.submit;
         hintBtn.textContent = t.hint;
+        letterHintBtn.textContent = t.letterHint;
         skipBtn.textContent = t.skip;
         restartBtn.textContent = t.restart;
         langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
