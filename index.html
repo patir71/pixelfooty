@@ -151,7 +151,7 @@
         <!-- Canvas ve tam ortasındaki Yeniden Başla butonu -->
         <div class="canvas-wrapper">
             <canvas id="pixelCanvas" width="256" height="256"></canvas>
-            <button id="restartBtn" class="center-restart-btn hidden">🔄 Yeniden Başla</button>
+            <button id="restartBtn" class="center-restart-btn hidden">Yeniden Başla</button>
         </div>
 
         <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 Ödül: 25 Puan</div>
@@ -162,7 +162,7 @@
         </div>
 
         <div class="btn-row" id="actionSection">
-            <button id="hintBtn">💡 Netleştir</button>
+            <button id="hintBtn">Netleştir (-5 Puan)</button>
             <button id="skipBtn">Pas Geç</button>
         </div>
 
@@ -176,12 +176,11 @@
             score: "Puan: ",
             streak: "Seri: ",
             league: "🇹🇷 Süper Lig",
-            status: "Netlik: Aşama 1/4 Ödül: 25 Puan",
             placeholder: "Takım adını yazın...",
             submit: "Tahmin Et",
-            hint: "💡 Netleştir",
+            hint: "Netleştir (-5 Puan)",
             skip: "Pas Geç",
-            restart: "🔄 Yeniden Başla",
+            restart: "Yeniden Başla",
             correctMsg: "Tebrikler! Doğru bildin 🎉",
             wrongMsg: "Yanlış! Tekrar dene ❌",
             shortNameMsg: "Lütfen tam olarak tahmin edin! ⚠️",
@@ -192,12 +191,11 @@
             score: "Score: ",
             streak: "Streak: ",
             league: "🇹🇷 Turkish Super League",
-            status: "Clarity: Stage 1/4 Reward: 25 Pts",
             placeholder: "Enter team name...",
             submit: "Guess",
-            hint: "💡 Sharpen",
+            hint: "Sharpen (-5 Pts)",
             skip: "Skip",
-            restart: "🔄 Restart",
+            restart: "Restart",
             correctMsg: "Correct! Well done 🎉",
             wrongMsg: "Wrong! Try again ❌",
             shortNameMsg: "Please guess properly! ⚠️",
@@ -257,7 +255,6 @@
 
     let currentImage = new Image();
 
-    // Takımları rastgele karıştırma fonksiyonu
     function shuffleArray(array) {
         let arr = [...array];
         for (let i = arr.length - 1; i > 0; i--) {
@@ -334,10 +331,11 @@
 
     function updateStatusText() {
         let t = translations[currentLang];
+        let earnedReward = Math.max(5, 25 - (currentStage - 1) * 5);
         if (currentLang === 'tr') {
-            statusDisplay.textContent = `Netlik: Aşama ${currentStage}/4 Ödül: ${Math.max(5, 25 - (currentStage-1)*5)} Puan`;
+            statusDisplay.textContent = `Netlik: Aşama ${currentStage}/4 Ödül: ${earnedReward} Puan`;
         } else {
-            statusDisplay.textContent = `Clarity: Stage ${currentStage}/4 Reward: ${Math.max(5, 25 - (currentStage-1)*5)} Pts`;
+            statusDisplay.textContent = `Clarity: Stage ${currentStage}/4 Reward: ${earnedReward} Pts`;
         }
     }
 
@@ -388,6 +386,9 @@
 
     hintBtn.addEventListener('click', () => {
         if (!isAnswered && currentStage < 4) {
+            score = Math.max(0, score - 5);
+            scoreDisplay.textContent = translations[currentLang].score + score;
+
             currentStage++;
             let pSize = 12 - (currentStage * 2);
             drawImagePixelated(Math.max(3, pSize));
@@ -427,7 +428,6 @@
         if (currentIndex < shuffledTeams.length) updateStatusText();
     }
 
-    // Oyunu başlat
     initGame();
 </script>
 
