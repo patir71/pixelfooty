@@ -406,7 +406,7 @@
     let currentIndex = 0;
     let currentStage = 1;
     let isAnswered = false;
-    let revealedMaskStructure = []; // Kelime bazlı maske yapısı
+    let revealedMaskStructure = [];
     let remainingLetterHints = 5;
     let isHintAreaShown = false;
     
@@ -505,7 +505,6 @@
         progressDisplay.textContent = `${currentIndex + 1} / ${shuffledTeams.length}`;
         
         let targetName = shuffledTeams[currentIndex].name;
-        // Kelime kelime maske oluşturma (Örn: "manchester united" -> [['m','a','n',...], ['u','n','i',...]])
         revealedMaskStructure = targetName.split(' ').map(word => word.split('').map(() => '_'));
         updateHintLettersDisplay();
         
@@ -729,7 +728,6 @@
             return;
         }
 
-        // Gizli harflerin yerlerini bul
         let hiddenList = [];
         let targetWords = targetName.split(' ');
         for (let wIdx = 0; wIdx < targetWords.length; wIdx++) {
