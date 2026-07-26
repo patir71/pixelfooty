@@ -235,14 +235,14 @@
             <div class="header-logo">
                 <img src="logos/pf-logo.png" alt="Logo">
             </div>
-            <button class="lang-btn" id="langToggle">EN</button>
+            <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
         </div>
         
         <div class="league-select-wrapper">
             <select id="leagueSelect" class="league-select">
-                <option value="superlig">Süper Lig</option>
-                <option value="premierleague">Premier Lig</option>
-                <option value="all">Tüm Ligler (Karisik)</option>
+                <option value="superlig">🇹🇷 Süper Lig</option>
+                <option value="premierleague">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier Lig</option>
+                <option value="all">🌍 Tüm Ligler (Karışık)</option>
             </select>
         </div>
 
@@ -254,46 +254,46 @@
             <canvas id="pixelCanvas" width="256" height="256"></canvas>
         </div>
 
-        <div class="info-text" id="statusDisplay">Netlik: Asama 1/4 | Odul: 20 Puan</div>
+        <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 | Ödül: 20 Puan</div>
         
         <div class="hint-letters-container hidden" id="hintLettersDisplay"></div>
 
         <div class="input-row" id="inputSection">
-            <input type="text" id="guessInput" placeholder="Takim adini yazin..." autocomplete="off">
+            <input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
             <button id="submitBtn" style="background:#e0f2fe; border-color:#bae6fd;">Tahmin Et</button>
         </div>
 
         <div class="btn-row" id="actionSection">
-            <button id="hintBtn">Netlestir (-10 Puan)</button>
-            <button id="letterHintBtn">Ipucu (5/5) (-2 Puan)</button>
-            <button id="skipBtn">Pas Gec</button>
+            <button id="hintBtn">Netleştir (-10 Puan)</button>
+            <button id="letterHintBtn">İpucu (5/5) (-2 Puan)</button>
+            <button id="skipBtn">Pas Geç</button>
         </div>
 
         <div class="message" id="message"></div>
 
         <div id="statsSection" class="stats-card hidden">
-            <div class="stats-title" id="statsTitle">Oyun Ozeti & Istatistikler</div>
+            <div class="stats-title" id="statsTitle">Oyun Özeti & İstatistikler 📊</div>
             <div class="stat-item">
-                <span id="statCorrectLabel">Dogru Sayisi:</span>
+                <span id="statCorrectLabel">Doğru Sayısı:</span>
                 <span class="stat-value" id="statCorrectVal">0</span>
             </div>
             <div class="stat-item">
-                <span id="statWrongLabel">Yanlis Tahmin:</span>
+                <span id="statWrongLabel">Yanlış Tahmin:</span>
                 <span class="stat-value" id="statWrongVal">0</span>
             </div>
             <div class="stat-item">
-                <span id="statPassLabel">Pas Gecilen:</span>
+                <span id="statPassLabel">Pas Geçilen:</span>
                 <span class="stat-value" id="statPassVal">0</span>
             </div>
             <div class="stat-item">
-                <span id="statAccuracyLabel">Dogruluk Orani:</span>
+                <span id="statAccuracyLabel">Doğruluk Oranı:</span>
                 <span class="stat-value" id="statAccuracyVal">%0</span>
             </div>
             <div class="stat-item">
                 <span id="statFinalScoreLabel">Toplam Puan:</span>
                 <span class="stat-value" id="statFinalScoreVal">0</span>
             </div>
-            <button id="statsRestartBtn" class="restart-game-btn">Yeniden Basla</button>
+            <button id="statsRestartBtn" class="restart-game-btn">Yeniden Başla</button>
         </div>
     </div>
 
@@ -302,23 +302,23 @@
         tr: {
             score: "Puan: ",
             streak: "Seri: ",
-            placeholder: "Takim adini yazin...",
+            placeholder: "Takım adını yazın...",
             submit: "Tahmin Et",
-            hint: "Netlestir (-10 Puan)",
-            letterHint: "Ipucu",
-            skip: "Pas Gec",
-            restart: "Yeniden Basla",
-            correctMsg: "Tebrikler! Dogru bildin",
-            wrongMsg: "Yanlis! Tekrar dene",
-            shortNameMsg: "Lutfen tam olarak tahmin edin!",
-            noPointsMsg: "Yeterli puanin yok!",
-            maxLetterMsg: "Daha fazla harf acamazsin!",
-            gameOver: "Tebrikler! Tum takimlari bitirdin!",
-            statsTitle: "Oyun Ozeti & Istatistikler",
-            correctLabel: "Dogru Sayisi:",
-            wrongLabel: "Yanlis Tahmin:",
-            passLabel: "Pas Gecilen:",
-            accuracyLabel: "Dogruluk Orani:",
+            hint: "Netleştir (-10 Puan)",
+            letterHint: "İpucu",
+            skip: "Pas Geç",
+            restart: "Yeniden Başla",
+            correctMsg: "Tebrikler! Doğru bildin 🎉",
+            wrongMsg: "Yanlış! Tekrar dene ❌",
+            shortNameMsg: "Lütfen tam olarak tahmin edin! ⚠️",
+            noPointsMsg: "Yeterli puanın yok! ⚠️",
+            maxLetterMsg: "Daha fazla harf açamazsın! ⚠️",
+            gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆",
+            statsTitle: "Oyun Özeti & İstatistikler 📊",
+            correctLabel: "Doğru Sayısı:",
+            wrongLabel: "Yanlış Tahmin:",
+            passLabel: "Pas Geçilen:",
+            accuracyLabel: "Doğruluk Oranı:",
             finalScoreLabel: "Toplam Puan:"
         },
         en: {
@@ -330,13 +330,13 @@
             letterHint: "Hint",
             skip: "Skip",
             restart: "Restart",
-            correctMsg: "Correct! Well done",
-            wrongMsg: "Wrong! Try again",
-            shortNameMsg: "Please guess properly!",
-            noPointsMsg: "Not enough points!",
-            maxLetterMsg: "Cannot reveal more letters!",
-            gameOver: "Congrats! You finished all teams!",
-            statsTitle: "Game Summary & Stats",
+            correctMsg: "Correct! Well done 🎉",
+            wrongMsg: "Wrong! Try again ❌",
+            shortNameMsg: "Please guess properly! ⚠️",
+            noPointsMsg: "Not enough points! ⚠️",
+            maxLetterMsg: "Cannot reveal more letters! ⚠️",
+            gameOver: "Congrats! You finished all teams! 🏆",
+            statsTitle: "Game Summary & Stats 📊",
             correctLabel: "Correct Count:",
             wrongLabel: "Wrong Guesses:",
             passLabel: "Skipped:",
@@ -349,23 +349,23 @@
 
     const leagues = {
         superlig: [
-            { name: "besiktas", file: "bjk.png" },
-            { name: "fenerbahce", file: "fb.png" },
+            { name: "beşiktaş", file: "bjk.png" },
+            { name: "fenerbahçe", file: "fb.png" },
             { name: "galatasaray", file: "gs.png" },
             { name: "trabzonspor", file: "ts.png" },
-            { name: "basaksehir", file: "basaksehir.png" },
+            { name: "başakşehir", file: "başakşehir.png" },
             { name: "samsunspor", file: "samsun.png" },
-            { name: "goztepe", file: "goztepe.png" },
+            { name: "göztepe", file: "göztepe.png" },
             { name: "konyaspor", file: "konya.png" },
             { name: "alanyaspor", file: "alanyaspor.png" },
             { name: "amed sk", file: "amedsk.png" },
-            { name: "caykur rizespor", file: "caykurrizespor.png" },
-            { name: "corum fk", file: "corumfk.png" },
+            { name: "çaykur rizespor", file: "caykurrizespor.png" },
+            { name: "çorum fk", file: "corumfk.png" },
             { name: "erzurumspor", file: "erzurumspor.png" },
-            { name: "eyupspor", file: "eyupspor.png" },
+            { name: "eyüpspor", file: "eyupspor.png" },
             { name: "gaziantep fk", file: "gaziantepfk.png" },
-            { name: "genclerbirligi", file: "genclerbirligi.png" },
-            { name: "kasimpasa", file: "kasimpasa.png" },
+            { name: "gençlerbirliği", file: "genclerbirligi.png" },
+            { name: "kasımpaşa", file: "kasimpaşa.png" },
             { name: "kocaeli", file: "kocaeli.png" }
         ],
         premierleague: [
@@ -517,7 +517,7 @@
             ctx.fillStyle = "#fff";
             ctx.font = "16px sans-serif";
             ctx.textAlign = "center";
-            ctx.fillText("Logo Bulunamadi", canvas.width / 2, canvas.height / 2);
+            ctx.fillText("Logo Bulunamadı", canvas.width / 2, canvas.height / 2);
         };
     }
 
@@ -589,7 +589,7 @@
     function updateStatusText() {
         let earnedReward = Math.max(5, 20 - (currentStage - 1) * 5);
         if (currentLang === 'tr') {
-            statusDisplay.textContent = "Netlik: Asama " + currentStage + "/4 | Odul: " + earnedReward + " Puan";
+            statusDisplay.textContent = "Netlik: Aşama " + currentStage + "/4 | Ödül: " + earnedReward + " Puan";
         } else {
             statusDisplay.textContent = "Clarity: Stage " + currentStage + "/4 | Reward: " + earnedReward + " Pts";
         }
@@ -597,12 +597,13 @@
 
     function removeTurkishChars(str) {
         return str
-            .replace(/g/g, 'g')
-            .replace(/u/g, 'u')
-            .replace(/s/g, 's')
-            .replace(/i/g, 'i')
-            .replace(/o/g, 'o')
-            .replace(/c/g, 'c');
+            .replace(/ğ/g, 'g')
+            .replace(/ü/g, 'u')
+            .replace(/ş/g, 's')
+            .replace(/ı/g, 'i')
+            .replace(/i̇/g, 'i')
+            .replace(/ö/g, 'o')
+            .replace(/ç/g, 'c');
     }
 
     function cleanTeamName(name) {
@@ -624,10 +625,21 @@
         }
 
         let isMatch = false;
-        let cleanedUser = cleanTeamName(userGuess);
-        let cleanedTarget = cleanTeamName(targetName);
-        if (userGuess === targetName || cleanedUser === cleanedTarget) {
-            isMatch = true;
+
+        if (currentLang === 'tr') {
+            let cleanedUser = cleanTeamName(userGuess);
+            let cleanedTarget = cleanTeamName(targetName);
+            if (userGuess === targetName || cleanedUser === cleanedTarget) {
+                isMatch = true;
+            }
+        } else {
+            let normalizedUser = removeTurkishChars(userGuess);
+            let normalizedTarget = removeTurkishChars(targetName);
+            let cleanedUser = cleanTeamName(normalizedUser);
+            let cleanedTarget = cleanTeamName(normalizedTarget);
+            if (normalizedUser === normalizedTarget || cleanedUser === cleanedTarget) {
+                isMatch = true;
+            }
         }
 
         let earnedPoints = Math.max(5, 20 - (currentStage - 1) * 5);
@@ -766,7 +778,7 @@
         updateLetterHintButtonState();
         skipBtn.textContent = t.skip;
         statsRestartBtn.textContent = t.restart;
-        langToggle.textContent = currentLang === 'tr' ? "EN" : "TR";
+        langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
         
         statsTitle.textContent = t.statsTitle;
         statCorrectLabel.textContent = t.correctLabel;
