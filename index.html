@@ -1,801 +1,802 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KJVWQPTQ4"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KJVWQPTQ4"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-      gtag('config', 'G-6KJVWQPTQ4');
-    </script>
+gtag('config', 'G-6KJVWQPTQ4');
+</script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PixelFooty</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelFooty</title>
 
-    <style>
-        body {
-            background-color: #ffffff;
-            color: #000000;
-            font-family: sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+<style>
+body {
+background-color: #ffffff;
+color: #000000;
+font-family: sans-serif;
+margin: 0;
+padding: 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+}
 
-        .game-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            width: 100%;
-            max-width: 360px;
-        }
+.game-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+text-align: center;
+width: 100%;
+max-width: 360px;
+}
 
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            align-items: center;
-            margin-bottom: 8px;
-        }
+.header-top {
+display: flex;
+justify-content: space-between;
+width: 100%;
+align-items: center;
+margin-bottom: 8px;
+}
 
-        .header-logo {
-            display: flex;
-            align-items: center;
-            height: 40px;
-        }
+.header-logo {
+display: flex;
+align-items: center;
+height: 40px;
+}
 
-        .header-logo img {
-            height: 40px;
-            width: auto;
-            object-fit: contain;
-            display: block;
-        }
+.header-logo img {
+height: 40px;
+width: auto;
+object-fit: contain;
+display: block;
+}
 
-        .lang-btn {
-            background: #f0f0f0;
-            border: 1px solid #ccc;
-            padding: 4px 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            border-radius: 4px;
-        }
+.lang-btn {
+background: #f0f0f0;
+border: 1px solid #ccc;
+padding: 4px 8px;
+cursor: pointer;
+font-size: 0.8rem;
+border-radius: 4px;
+}
 
-        .info-text {
-            margin-bottom: 6px;
-            font-size: 0.95rem;
-        }
+.info-text {
+margin-bottom: 6px;
+font-size: 0.95rem;
+}
 
-        .league-select-wrapper {
-            margin-bottom: 8px;
-            width: 100%;
-        }
+.league-select-wrapper {
+margin-bottom: 8px;
+width: 100%;
+}
 
-        .league-select {
-            width: 100%;
-            padding: 6px 10px;
-            font-size: 0.95rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: #f8f8f8;
-            font-weight: bold;
-            cursor: pointer;
-            outline: none;
-        }
+.league-select {
+width: 100%;
+padding: 6px 10px;
+font-size: 0.95rem;
+border: 1px solid #ccc;
+border-radius: 4px;
+background: #f8f8f8;
+font-weight: bold;
+cursor: pointer;
+outline: none;
+}
 
-        .canvas-wrapper {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            max-width: 250px;
-            margin: 10px 0;
-        }
+.canvas-wrapper {
+position: relative;
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+max-width: 250px;
+margin: 10px 0;
+}
 
-        canvas {
-            image-rendering: pixelated;
-            width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-        }
+canvas {
+image-rendering: pixelated;
+width: 100%;
+height: auto;
+border: 1px solid #ddd;
+border-radius: 6px;
+}
 
-        .hint-letters-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            margin: 6px 0;
-            min-height: 24px;
-        }
+.hint-letters-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+margin: 6px 0;
+min-height: 24px;
+}
 
-        .hint-word-row {
-            font-family: monospace;
-            font-size: 1.2rem;
-            letter-spacing: 4px;
-            color: #444;
-            font-weight: bold;
-        }
+.hint-word-row {
+font-family: monospace;
+font-size: 1.2rem;
+letter-spacing: 4px;
+color: #444;
+font-weight: bold;
+}
 
-        .input-row {
-            display: flex;
-            gap: 5px;
-            margin-top: 5px;
-            width: 100%;
-        }
+.input-row {
+display: flex;
+gap: 5px;
+margin-top: 5px;
+width: 100%;
+}
 
-        input {
-            flex: 1;
-            padding: 8px;
-            font-size: 1rem;
-            border: 1px solid #999;
-            border-radius: 4px;
-            outline: none;
-        }
+input {
+flex: 1;
+padding: 8px;
+font-size: 1rem;
+border: 1px solid #999;
+border-radius: 4px;
+outline: none;
+}
 
-        button {
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            background: #f8f8f8;
-            font-weight: bold;
-        }
+button {
+padding: 8px 12px;
+cursor: pointer;
+border-radius: 4px;
+border: 1px solid #ccc;
+background: #f8f8f8;
+font-weight: bold;
+}
 
-        button:active {
-            background: #e0e0e0;
-        }
+button:active {
+background: #e0e0e0;
+}
 
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+button:disabled {
+opacity: 0.5;
+cursor: not-allowed;
+}
 
-        .btn-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            width: 100%;
-        }
+.btn-row {
+display: flex;
+gap: 8px;
+margin-top: 8px;
+width: 100%;
+}
 
-        .btn-row button {
-            flex: 1;
-        }
+.btn-row button {
+flex: 1;
+}
 
-        .message {
-            font-weight: bold;
-            margin-top: 10px;
-            min-height: 24px;
-            font-size: 0.95rem;
-        }
+.message {
+font-weight: bold;
+margin-top: 10px;
+min-height: 24px;
+font-size: 0.95rem;
+}
 
-        .stats-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 20px;
-            width: 100%;
-            margin-top: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            text-align: left;
-        }
+.stats-card {
+background: #f8fafc;
+border: 1px solid #e2e8f0;
+border-radius: 8px;
+padding: 20px;
+width: 100%;
+margin-top: 10px;
+box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+text-align: left;
+}
 
-        .stats-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 15px;
-            color: #1e293b;
-        }
+.stats-title {
+font-size: 1.1rem;
+font-weight: bold;
+text-align: center;
+margin-bottom: 15px;
+color: #1e293b;
+}
 
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 0.95rem;
-            color: #475569;
-        }
+.stat-item {
+display: flex;
+justify-content: space-between;
+margin-bottom: 10px;
+font-size: 0.95rem;
+color: #475569;
+}
 
-        .stat-value {
-            font-weight: bold;
-            color: #0f172a;
-        }
+.stat-value {
+font-weight: bold;
+color: #0f172a;
+}
 
-        .restart-game-btn {
-            width: 100%;
-            background: #22c55e;
-            color: white;
-            border: none;
-            padding: 10px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 15px;
-        }
+.restart-game-btn {
+width: 100%;
+background: #22c55e;
+color: white;
+border: none;
+padding: 10px;
+font-size: 1rem;
+font-weight: bold;
+border-radius: 6px;
+cursor: pointer;
+margin-top: 15px;
+}
 
-        .restart-game-btn:hover {
-            background: #16a34a;
-        }
+.restart-game-btn:hover {
+background: #16a34a;
+}
 
-        .hidden {
-            display: none !important;
-        }
-    </style>
+.hidden {
+display: none !important;
+}
+</style>
 </head>
 <body>
 
-    <div class="game-container">
-        <div class="header-top">
-            <div class="header-logo">
-                <img src="logos/pf-logo.png" alt="Logo">
-            </div>
-            <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
-        </div>
-        
-        <div class="league-select-wrapper">
-            <select id="leagueSelect" class="league-select">
-                <option value="superlig">🇹🇷 Süper Lig</option>
-                <option value="premierleague">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier Lig</option>
-                <option value="all">🌍 Tüm Ligler (Karışık)</option>
-            </select>
-        </div>
+<div class="game-container">
+<div class="header-top">
+<div class="header-logo">
+<img src="logos/pf-logo.png" alt="Logo">
+</div>
+<button class="lang-btn" id="langToggle">EN 🇬🇧</button>
+</div>
 
-        <div class="info-text" id="scoreDisplay">Puan: 0</div>
-        <div class="info-text" id="streakDisplay">Seri: 0</div>
-        <div class="info-text" id="progressDisplay">1 / 18</div>
+<div class="league-select-wrapper">
+<select id="leagueSelect" class="league-select">
+<option value="superlig">🇹🇷 Süper Lig</option>
+<option value="premierleague">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier Lig</option>
+<option value="all">🌍 Tüm Ligler (Karışık)</option>
+</select>
+</div>
 
-        <!-- Canvas Alanı -->
-        <div class="canvas-wrapper" id="canvasWrapper">
-            <canvas id="pixelCanvas" width="256" height="256"></canvas>
-        </div>
+<div class="info-text" id="scoreDisplay">Puan: 0</div>
+<div class="info-text" id="streakDisplay">Seri: 0</div>
+<div class="info-text" id="progressDisplay">1 / 18</div>
 
-        <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 | Ödül: 20 Puan</div>
-        
-        <!-- Harf İpucu Görüntüleme Alanı (Başlangıçta gizli) -->
-        <div class="hint-letters-container hidden" id="hintLettersDisplay"></div>
+<!-- Canvas Alanı -->
+<div class="canvas-wrapper" id="canvasWrapper">
+<canvas id="pixelCanvas" width="256" height="256"></canvas>
+</div>
 
-        <div class="input-row" id="inputSection">
-            <input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
-            <button id="submitBtn" style="background:#e0f2fe; border-color:#bae6fd;">Tahmin Et</button>
-        </div>
+<div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 | Ödül: 20 Puan</div>
 
-        <div class="btn-row" id="actionSection">
-            <button id="hintBtn">Netleştir (-10 Puan)</button>
-            <button id="letterHintBtn">İpucu (5/5) (-2 Puan)</button>
-            <button id="skipBtn">Pas Geç</button>
-        </div>
+<!-- Harf İpucu Görüntüleme Alanı (Başlangıçta gizli) -->
+<div class="hint-letters-container hidden" id="hintLettersDisplay"></div>
 
-        <div class="message" id="message"></div>
+<div class="input-row" id="inputSection">
+<input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
+<button id="submitBtn" style="background:#e0f2fe; border-color:#bae6fd;">Tahmin Et</button>
+</div>
 
-        <!-- Oyun Bitti İstatistik Kartı -->
-        <div id="statsSection" class="stats-card hidden">
-            <div class="stats-title" id="statsTitle">Oyun Özeti & İstatistikler 📊</div>
-            <div class="stat-item">
-                <span id="statCorrectLabel">Doğru Sayısı:</span>
-                <span class="stat-value" id="statCorrectVal">0</span>
-            </div>
-            <div class="stat-item">
-                <span id="statWrongLabel">Yanlış Tahmin:</span>
-                <span class="stat-value" id="statWrongVal">0</span>
-            </div>
-            <div class="stat-item">
-                <span id="statPassLabel">Pas Geçilen:</span>
-                <span class="stat-value" id="statPassVal">0</span>
-            </div>
-            <div class="stat-item">
-                <span id="statAccuracyLabel">Doğruluk Oranı:</span>
-                <span class="stat-value" id="statAccuracyVal">%0</span>
-            </div>
-            <div class="stat-item">
-                <span id="statFinalScoreLabel">Toplam Puan:</span>
-                <span class="stat-value" id="statFinalScoreVal">0</span>
-            </div>
-            <button id="statsRestartBtn" class="restart-game-btn">Yeniden Başla</button>
-        </div>
-    </div>
+<div class="btn-row" id="actionSection">
+<button id="hintBtn">Netleştir (-10 Puan)</button>
+<button id="letterHintBtn">İpucu (5/5) (-2 Puan)</button>
+<button id="skipBtn">Pas Geç</button>
+</div>
+
+<div class="message" id="message"></div>
+
+<!-- Oyun Bitti İstatistik Kartı -->
+<div id="statsSection" class="stats-card hidden">
+<div class="stats-title" id="statsTitle">Oyun Özeti & İstatistikler 📊</div>
+<div class="stat-item">
+<span id="statCorrectLabel">Doğru Sayısı:</span>
+<span class="stat-value" id="statCorrectVal">0</span>
+</div>
+<div class="stat-item">
+<span id="statWrongLabel">Yanlış Tahmin:</span>
+<span class="stat-value" id="statWrongVal">0</span>
+</div>
+<div class="stat-item">
+<span id="statPassLabel">Pas Geçilen:</span>
+<span class="stat-value" id="statPassVal">0</span>
+</div>
+<div class="stat-item">
+<span id="statAccuracyLabel">Doğruluk Oranı:</span>
+<span class="stat-value" id="statAccuracyVal">%0</span>
+</div>
+<div class="stat-item">
+<span id="statFinalScoreLabel">Toplam Puan:</span>
+<span class="stat-value" id="statFinalScoreVal">0</span>
+</div>
+<button id="statsRestartBtn" class="restart-game-btn">Yeniden Başla</button>
+</div>
+</div>
 
 <script>
-    const translations = {
-        tr: {
-            score: "Puan: ",
-            streak: "Seri: ",
-            placeholder: "Takım adını yazın...",
-            submit: "Tahmin Et",
-            hint: "Netleştir (-10 Puan)",
-            letterHint: "İpucu",
-            skip: "Pas Geç",
-            restart: "Yeniden Başla",
-            correctMsg: "Tebrikler! Doğru bildin 🎉",
-            wrongMsg: "Yanlış! Tekrar dene ❌",
-            shortNameMsg: "Lütfen tam olarak tahmin edin! ⚠️",
-            noPointsMsg: "Yeterli puanın yok! ⚠️",
-            maxLetterMsg: "Daha fazla harf açamazsın! ⚠️",
-            gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆",
-            statsTitle: "Oyun Özeti & İstatistikler 📊",
-            correctLabel: "Doğru Sayısı:",
-            wrongLabel: "Yanlış Tahmin:",
-            passLabel: "Pas Geçilen:",
-            accuracyLabel: "Doğruluk Oranı:",
-            finalScoreLabel: "Toplam Puan:"
-        },
-        en: {
-            score: "Score: ",
-            streak: "Streak: ",
-            placeholder: "Enter team name...",
-            submit: "Guess",
-            hint: "Sharpen (-10 Pts)",
-            letterHint: "Hint",
-            skip: "Skip",
-            restart: "Restart",
-            correctMsg: "Correct! Well done 🎉",
-            wrongMsg: "Wrong! Try again ❌",
-            shortNameMsg: "Please guess properly! ⚠️",
-            noPointsMsg: "Not enough points! ⚠️",
-            maxLetterMsg: "Cannot reveal more letters! ⚠️",
-            gameOver: "Congrats! You finished all teams! 🏆",
-            statsTitle: "Game Summary & Stats 📊",
-            correctLabel: "Correct Count:",
-            wrongLabel: "Wrong Guesses:",
-            passLabel: "Skipped:",
-            accuracyLabel: "Accuracy Rate:",
-            finalScoreLabel: "Total Score:"
-        }
-    };
+const translations = {
+tr: {
+score: "Puan: ",
+streak: "Seri: ",
+placeholder: "Takım adını yazın...",
+submit: "Tahmin Et",
+hint: "Netleştir (-10 Puan)",
+letterHint: "İpucu",
+skip: "Pas Geç",
+restart: "Yeniden Başla",
+correctMsg: "Tebrikler! Doğru bildin 🎉",
+wrongMsg: "Yanlış! Tekrar dene ❌",
+shortNameMsg: "Lütfen tam olarak tahmin edin! ⚠️",
+noPointsMsg: "Yeterli puanın yok! ⚠️",
+maxLetterMsg: "Daha fazla harf açamazsın! ⚠️",
+gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆",
+statsTitle: "Oyun Özeti & İstatistikler 📊",
+correctLabel: "Doğru Sayısı:",
+wrongLabel: "Yanlış Tahmin:",
+passLabel: "Pas Geçilen:",
+accuracyLabel: "Doğruluk Oranı:",
+finalScoreLabel: "Toplam Puan:"
+},
+en: {
+score: "Score: ",
+streak: "Streak: ",
+placeholder: "Enter team name...",
+submit: "Guess",
+hint: "Sharpen (-10 Pts)",
+letterHint: "Hint",
+skip: "Skip",
+restart: "Restart",
+correctMsg: "Correct! Well done 🎉",
+wrongMsg: "Wrong! Try again ❌",
+shortNameMsg: "Please guess properly! ⚠️",
+noPointsMsg: "Not enough points! ⚠️",
+maxLetterMsg: "Cannot reveal more letters! ⚠️",
+gameOver: "Congrats! You finished all teams! 🏆",
+statsTitle: "Game Summary & Stats 📊",
+correctLabel: "Correct Count:",
+wrongLabel: "Wrong Guesses:",
+passLabel: "Skipped:",
+accuracyLabel: "Accuracy Rate:",
+finalScoreLabel: "Total Score:"
+}
+};
 
-    let currentLang = 'tr';
+let currentLang = 'tr';
 
-    const leagues = {
-        superlig: [
-            { name: "beşiktaş", file: "bjk.png" },
-            { name: "fenerbahçe", file: "fb.png" },
-            { name: "galatasaray", file: "gs.png" },
-            { name: "trabzonspor", file: "ts.png" },
-            { name: "başakşehir", file: "başakşehir.png" },
-            { name: "samsunspor", file: "samsun.png" },
-            { name: "göztepe", file: "göztepe.png" },
-            { name: "konyaspor", file: "konya.png" },
-            { name: "alanyaspor", file: "alanyaspor.png" },
-            { name: "amed sk", file: "amedsk.png" },
-            { name: "çaykur rizespor", file: "caykurrizespor.png" },
-            { name: "çorum fk", file: "corumfk.png" },
-            { name: "erzurumspor", file: "erzurumspor.png" },
-            { name: "eyüpspor", file: "eyupspor.png" },
-            { name: "gaziantep fk", file: "gaziantepfk.png" },
-            { name: "gençlerbirliği", file: "genclerbirligi.png" },
-            { name: "kasımpaşa", file: "kasimpaşa.png" },
-            { name: "kocaeli", file: "kocaeli.png" }
-        ],
-        premierleague: [
-            { name: "bournemouth", file: "bournemouth.png" },
-            { name: "arsenal", file: "arsenal.png" },
-            { name: "aston villa", file: "astonvilla.png" },
-            { name: "brentford", file: "brentford.png" },
-            { name: "brighton", file: "brighton.png" },
-            { name: "chelsea", file: "chelsea.png" },
-            { name: "coventry", file: "coventry.png" },
-            { name: "crystal palace", file: "crystalpalace.png" },
-            { name: "everton", file: "everton.png" },
-            { name: "fulham", file: "fulham.png" },
-            { name: "hull city", file: "hullcity.png" },
-            { name: "ipswich town", file: "ipswich.png" },
-            { name: "leeds united", file: "leeds.png" },
-            { name: "liverpool", file: "liverpool.png" },
-            { name: "manchester city", file: "mancity.png" },
-            { name: "manchester united", file: "manutd.png" },
-            { name: "newcastle", file: "newcastle.png" },
-            { name: "nottingham forest", file: "nottingham.png" },
-            { name: "sunderland", file: "sunderland.png" },
-            { name: "tottenham", file: "tottenham.png" }
-        ]
-    };
+const leagues = {
+superlig: [
+{ name: "beşiktaş", file: "bjk.png" },
+{ name: "fenerbahçe", file: "fb.png" },
+{ name: "galatasaray", file: "gs.png" },
+{ name: "trabzonspor", file: "ts.png" },
+{ name: "başakşehir", file: "başakşehir.png" },
+{ name: "samsunspor", file: "samsun.png" },
+{ name: "göztepe", file: "göztepe.png" },
+{ name: "konyaspor", file: "konya.png" },
+{ name: "alanyaspor", file: "alanyaspor.png" },
+{ name: "amed sk", file: "amedsk.png" },
+{ name: "çaykur rizespor", file: "caykurrizespor.png" },
+{ name: "çorum fk", file: "corumfk.png" },
+{ name: "erzurumspor", file: "erzurumspor.png" },
+{ name: "eyüpspor", file: "eyupspor.png" },
+{ name: "gaziantep fk", file: "gaziantepfk.png" },
+{ name: "gençlerbirliği", file: "genclerbirligi.png" },
+{ name: "kasımpaşa", file: "kasimpaşa.png" },
+{ name: "kocaeli", file: "kocaeli.png" }
+ ],
+premierleague: [
+{ name: "bournemouth", file: "bournemouth.png" },
+{ name: "arsenal", file: "arsenal.png" },
+{ name: "aston villa", file: "astonvilla.png" },
+{ name: "brentford", file: "brentford.png" },
+{ name: "brighton", file: "brighton.png" },
+{ name: "chelsea", file: "chelsea.png" },
+{ name: "coventry", file: "coventry.png" },
+{ name: "crystal palace", file: "crystalpalace.png" },
+{ name: "everton", file: "everton.png" },
+{ name: "fulham", file: "fulham.png" },
+{ name: "hull city", file: "hullcity.png" },
+{ name: "ipswich town", file: "ipswich.png" },
+{ name: "leeds united", file: "leeds.png" },
+{ name: "liverpool", file: "liverpool.png" },
+{ name: "manchester city", file: "mancity.png" },
+{ name: "manchester united", file: "manutd.png" },
+{ name: "newcastle", file: "newcastle.png" },
+{ name: "nottingham forest", file: "nottingham.png" },
+{ name: "sunderland", file: "sunderland.png" },
+{ name: "tottenham", file: "tottenham.png" }
+ ]
+};
 
-    let score = 0;
-    let streak = 0;
-    let correctCount = 0;
-    let wrongCount = 0;
-    let skippedCount = 0;
-    let shuffledTeams = [];
-    let currentIndex = 0;
-    let currentStage = 1;
-    let isAnswered = false;
-    let revealedMaskStructure = [];
-    let remainingLetterHints = 5;
-    let isHintAreaShown = false;
-    
-    const canvas = document.getElementById('pixelCanvas');
-    const ctx = canvas.getContext('2d');
-    const guessInput = document.getElementById('guessInput');
-    const submitBtn = document.getElementById('submitBtn');
-    const hintBtn = document.getElementById('hintBtn');
-    const letterHintBtn = document.getElementById('letterHintBtn');
-    const skipBtn = document.getElementById('skipBtn');
-    const message = document.getElementById('message');
-    
-    const scoreDisplay = document.getElementById('scoreDisplay');
-    const streakDisplay = document.getElementById('streakDisplay');
-    const progressDisplay = document.getElementById('progressDisplay');
-    const leagueSelect = document.getElementById('leagueSelect');
-    const statusDisplay = document.getElementById('statusDisplay');
-    const hintLettersDisplay = document.getElementById('hintLettersDisplay');
-    const langToggle = document.getElementById('langToggle');
+let score = 0;
+let streak = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let skippedCount = 0;
+let shuffledTeams = [];
+let currentIndex = 0;
+let currentStage = 1;
+let isAnswered = false;
+let revealedMaskStructure = [];
+let remainingLetterHints = 5;
+let isHintAreaShown = false;
 
-    const inputSection = document.getElementById('inputSection');
-    const actionSection = document.getElementById('actionSection');
-    const canvasWrapper = document.getElementById('canvasWrapper');
-    const statsSection = document.getElementById('statsSection');
+const canvas = document.getElementById('pixelCanvas');
+const ctx = canvas.getContext('2d');
+const guessInput = document.getElementById('guessInput');
+const submitBtn = document.getElementById('submitBtn');
+const hintBtn = document.getElementById('hintBtn');
+const letterHintBtn = document.getElementById('letterHintBtn');
+const skipBtn = document.getElementById('skipBtn');
+const message = document.getElementById('message');
 
-    const statsTitle = document.getElementById('statsTitle');
-    const statCorrectLabel = document.getElementById('statCorrectLabel');
-    const statWrongLabel = document.getElementById('statWrongLabel');
-    const statPassLabel = document.getElementById('statPassLabel');
-    const statAccuracyLabel = document.getElementById('statAccuracyLabel');
-    const statFinalScoreLabel = document.getElementById('statFinalScoreLabel');
-    const statCorrectVal = document.getElementById('statCorrectVal');
-    const statWrongVal = document.getElementById('statWrongVal');
-    const statPassVal = document.getElementById('statPassVal');
-    const statAccuracyVal = document.getElementById('statAccuracyVal');
-    const statFinalScoreVal = document.getElementById('statFinalScoreVal');
-    const statsRestartBtn = document.getElementById('statsRestartBtn');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const streakDisplay = document.getElementById('streakDisplay');
+const progressDisplay = document.getElementById('progressDisplay');
+const leagueSelect = document.getElementById('leagueSelect');
+const statusDisplay = document.getElementById('statusDisplay');
+const hintLettersDisplay = document.getElementById('hintLettersDisplay');
+const langToggle = document.getElementById('langToggle');
 
-    let currentImage = new Image();
+const inputSection = document.getElementById('inputSection');
+const actionSection = document.getElementById('actionSection');
+const canvasWrapper = document.getElementById('canvasWrapper');
+const statsSection = document.getElementById('statsSection');
 
-    function shuffleArray(array) {
-        let arr = [...array];
-        for (let i = arr.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-    }
+const statsTitle = document.getElementById('statsTitle');
+const statCorrectLabel = document.getElementById('statCorrectLabel');
+const statWrongLabel = document.getElementById('statWrongLabel');
+const statPassLabel = document.getElementById('statPassLabel');
+const statAccuracyLabel = document.getElementById('statAccuracyLabel');
+const statFinalScoreLabel = document.getElementById('statFinalScoreLabel');
+const statCorrectVal = document.getElementById('statCorrectVal');
+const statWrongVal = document.getElementById('statWrongVal');
+const statPassVal = document.getElementById('statPassVal');
+const statAccuracyVal = document.getElementById('statAccuracyVal');
+const statFinalScoreVal = document.getElementById('statFinalScoreVal');
+const statsRestartBtn = document.getElementById('statsRestartBtn');
 
-    function initGame() {
-        let selectedLeague = leagueSelect.value;
-        let teamPool = [];
+let currentImage = new Image();
 
-        if (selectedLeague === 'all') {
-            teamPool = [...leagues.superlig, ...leagues.premierleague];
-        } else {
-            teamPool = leagues[selectedLeague] || leagues.superlig;
-        }
+function shuffleArray(array) {
+let arr = [...array];
+for (let i = arr.length - 1; i > 0; i--) {
+let j = Math.floor(Math.random() * (i + 1));
+[arr[i], arr[j]] = [arr[j], arr[i]];
+}
+return arr;
+}
 
-        shuffledTeams = shuffleArray(teamPool);
-        currentIndex = 0;
-        score = 0;
-        streak = 0;
-        correctCount = 0;
-        wrongCount = 0;
-        skippedCount = 0;
-        
-        scoreDisplay.textContent = translations[currentLang].score + score;
-        streakDisplay.textContent = translations[currentLang].streak + streak;
-        
-        statsSection.classList.add('hidden');
-        canvasWrapper.classList.remove('hidden');
-        inputSection.classList.remove('hidden');
-        actionSection.classList.remove('hidden');
-        progressDisplay.classList.remove('hidden');
-        statusDisplay.classList.remove('hidden');
+function initGame() {
+let selectedLeague = leagueSelect.value;
+let teamPool = [];
 
-        loadTeam();
-    }
+if (selectedLeague === 'all') {
+teamPool = [...leagues.superlig, ...leagues.premierleague];
+} else {
+teamPool = leagues[selectedLeague] || leagues.superlig;
+}
 
-    function loadTeam() {
-        if (currentIndex >= shuffledTeams.length) {
-            showGameOverStats();
-            return;
-        }
-        
-        isAnswered = false;
-        isHintAreaShown = false;
-        hintLettersDisplay.classList.add('hidden');
-        message.textContent = "";
-        guessInput.value = "";
-        currentStage = 1;
-        remainingLetterHints = 5;
-        updateLetterHintButtonState();
-        updateStatusText();
-        progressDisplay.textContent = `${currentIndex + 1} / ${shuffledTeams.length}`;
-        
-        let targetName = shuffledTeams[currentIndex].name;
-        revealedMaskStructure = targetName.split(' ').map(word => word.split('').map(() => '_'));
-        updateHintLettersDisplay();
-        
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+shuffledTeams = shuffleArray(teamPool);
+currentIndex = 0;
+score = 0;
+streak = 0;
+correctCount = 0;
+wrongCount = 0;
+skippedCount = 0;
 
-        currentImage = new Image();
-        currentImage.src = `logos/${shuffledTeams[currentIndex].file}`;
-        currentImage.onload = () => {
-            drawImagePixelated(12);
-        };
-        currentImage.onerror = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#888";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#fff";
-            ctx.font = "16px sans-serif";
-            ctx.textAlign = "center";
-            ctx.fillText("Logo Bulunamadı", canvas.width / 2, canvas.height / 2);
-        };
-    }
+scoreDisplay.textContent = translations[currentLang].score + score;
+streakDisplay.textContent = translations[currentLang].streak + streak;
 
-    function showGameOverStats() {
-        canvasWrapper.classList.add('hidden');
-        inputSection.classList.add('hidden');
-        actionSection.classList.add('hidden');
-        progressDisplay.classList.add('hidden');
-        statusDisplay.classList.add('hidden');
-        hintLettersDisplay.classList.add('hidden');
-        
-        message.textContent = translations[currentLang].gameOver;
+statsSection.classList.add('hidden');
+canvasWrapper.classList.remove('hidden');
+inputSection.classList.remove('hidden');
+actionSection.classList.remove('hidden');
+progressDisplay.classList.remove('hidden');
+statusDisplay.classList.remove('hidden');
 
-        let totalAttempts = correctCount + wrongCount;
-        let accuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
+loadTeam();
+}
 
-        statCorrectVal.textContent = correctCount;
-        statWrongVal.textContent = wrongCount;
-        statPassVal.textContent = skippedCount;
-        statAccuracyVal.textContent = `%${accuracy}`;
-        statFinalScoreVal.textContent = score;
+function loadTeam() {
+if (currentIndex >= shuffledTeams.length) {
+showGameOverStats();
+return;
+}
 
-        statsSection.classList.remove('hidden');
-    }
+isAnswered = false;
+isHintAreaShown = false;
+hintLettersDisplay.classList.add('hidden');
+message.textContent = "";
+guessInput.value = "";
+currentStage = 1;
+remainingLetterHints = 5;
+updateLetterHintButtonState();
+updateStatusText();
+progressDisplay.textContent = ${currentIndex + 1} / ${shuffledTeams.length};
 
-    function updateHintLettersDisplay() {
-        hintLettersDisplay.innerHTML = '';
-        revealedMaskStructure.forEach(wordArr => {
-            let rowDiv = document.createElement('div');
-            rowDiv.className = 'hint-word-row';
-            rowDiv.textContent = wordArr.join(' ');
-            hintLettersDisplay.appendChild(rowDiv);
-        });
-    }
+let targetName = shuffledTeams[currentIndex].name;
+revealedMaskStructure = targetName.split(' ').map(word => word.split('').map(() => '_'));
+updateHintLettersDisplay();
 
-    function updateLetterHintButtonState() {
-        let t = translations[currentLang];
-        if (remainingLetterHints > 0) {
-            letterHintBtn.textContent = `${t.letterHint} (${remainingLetterHints}/5) (-2 Puan)`;
-            letterHintBtn.disabled = false;
-        } else {
-            letterHintBtn.textContent = `${t.letterHint} (0/5)`;
-            letterHintBtn.disabled = true;
-        }
-    }
+ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    function drawImagePixelated(pixelSize) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.imageSmoothingEnabled = false;
-        
-        if (pixelSize === 1) {
-            ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
-            return;
-        }
+currentImage = new Image();
+currentImage.src = logos/${shuffledTeams[currentIndex].file}`;
+currentImage.onload = () => {
+drawImagePixelated(12);
+};
+currentImage.onerror = () => {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+ctx.fillStyle = "#888";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.fillStyle = "#fff";
+ctx.font = "16px sans-serif";
+ctx.textAlign = "center";
+ctx.fillText("Logo Bulunamadı", canvas.width / 2, canvas.height / 2);
+};
+}
 
-        let w = Math.max(1, Math.floor(canvas.width / pixelSize));
-        let h = Math.max(1, Math.floor(canvas.height / pixelSize));
-        
-        let tempCanvas = document.createElement('canvas');
-        let tempCtx = tempCanvas.getContext('2d');
-        tempCanvas.width = w;
-        tempCanvas.height = h;
-        
-        tempCtx.imageSmoothingEnabled = false;
-        tempCtx.drawImage(currentImage, 0, 0, w, h);
-        ctx.drawImage(tempCanvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
-    }
+function showGameOverStats() {
+canvasWrapper.classList.add('hidden');
+inputSection.classList.add('hidden');
+actionSection.classList.add('hidden');
+progressDisplay.classList.add('hidden');
+statusDisplay.classList.add('hidden');
+hintLettersDisplay.classList.add('hidden');
 
-    function updateStatusText() {
-        let earnedReward = Math.max(5, 20 - (currentStage - 1) * 5);
-        if (currentLang === 'tr') {
-            statusDisplay.textContent = `Netlik: Aşama ${currentStage}/4 | Ödül: ${earnedReward} Puan`;
-        } else {
-            statusDisplay.textContent = `Clarity: Stage ${currentStage}/4 | Reward: ${earnedReward} Pts`;
-        }
-    }
+message.textContent = translations[currentLang].gameOver;
 
-    function removeTurkishChars(str) {
-        return str
-            .replace(/ğ/g, 'g')
-            .replace(/ü/g, 'u')
-            .replace(/ş/g, 's')
-            .replace(/ı/g, 'i')
-            .replace(/i̇/g, 'i')
-            .replace(/ö/g, 'o')
-            .replace(/ç/g, 'c');
-    }
+let totalAttempts = correctCount + wrongCount;
+let accuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
 
-    function cleanTeamName(name) {
-        return name.toLowerCase()
-            .trim()
-            .replace(/\s+(sk|fk|spor|united|city|town)$/, '')
-            .replace(/(sk|fk|spor|united|city|town)$/, '');
-    }
+statCorrectVal.textContent = correctCount;
+statWrongVal.textContent = wrongCount;
+statPassVal.textContent = skippedCount;
+statAccuracyVal.textContent = %${accuracy}`;
+statFinalScoreVal.textContent = score;
 
-    function checkGuess() {
-        if (isAnswered) return;
-        let userGuess = guessInput.value.toLowerCase().trim();
-        let targetName = shuffledTeams[currentIndex].name.toLowerCase();
+statsSection.classList.remove('hidden');
+}
 
-        const forbiddenShorts = ["gs", "fb", "bjk", "ts"];
-        if (forbiddenShorts.includes(userGuess)) {
-            message.textContent = translations[currentLang].shortNameMsg;
-            return;
-        }
+function updateHintLettersDisplay() {
+hintLettersDisplay.innerHTML = '';
+revealedMaskStructure.forEach(wordArr => {
+let rowDiv = document.createElement('div');
+rowDiv.className = 'hint-word-row';
+rowDiv.textContent = wordArr.join(' ');
+hintLettersDisplay.appendChild(rowDiv);
+});
+}
 
-        let isMatch = false;
+function updateLetterHintButtonState() {
+let t = translations[currentLang];
+if (remainingLetterHints > 0) {
+letterHintBtn.textContent = ${t.letterHint} (${remainingLetterHints}/5) (-2 Puan);
+letterHintBtn.disabled = false;
+} else {
+letterHintBtn.textContent = ${t.letterHint} (0/5)`;
+letterHintBtn.disabled = true;
+}
+}
 
-        if (currentLang === 'tr') {
-            let cleanedUser = cleanTeamName(userGuess);
-            let cleanedTarget = cleanTeamName(targetName);
-            if (userGuess === targetName || cleanedUser === cleanedTarget) {
-                isMatch = true;
-            }
-        } else {
-            let normalizedUser = removeTurkishChars(userGuess);
-            let normalizedTarget = removeTurkishChars(targetName);
-            let cleanedUser = cleanTeamName(normalizedUser);
-            let cleanedTarget = cleanTeamName(normalizedTarget);
-            if (normalizedUser === normalizedTarget || cleanedUser === cleanedTarget) {
-                isMatch = true;
-            }
-        }
+function drawImagePixelated(pixelSize) {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+ctx.imageSmoothingEnabled = false;
 
-        let earnedPoints = Math.max(5, 20 - (currentStage - 1) * 5);
+if (pixelSize === 1) {
+ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+return;
+}
 
-        if (isMatch) {
-            isAnswered = true;
-            score += earnedPoints;
-            streak += 1;
-            correctCount++;
-            scoreDisplay.textContent = translations[currentLang].score + score;
-            streakDisplay.textContent = translations[currentLang].streak + streak;
-            message.textContent = translations[currentLang].correctMsg;
-            
-            let targetWords = shuffledTeams[currentIndex].name.split(' ');
-            revealedMaskStructure = targetWords.map(w => w.split(''));
-            hintLettersDisplay.classList.remove('hidden');
-            updateHintLettersDisplay();
-            drawImagePixelated(1);
+let w = Math.max(1, Math.floor(canvas.width / pixelSize));
+let h = Math.max(1, Math.floor(canvas.height / pixelSize));
 
-            currentIndex++;
-            setTimeout(loadTeam, 2000);
-        } else {
-            wrongCount++;
-            message.textContent = translations[currentLang].wrongMsg;
-        }
-    }
+let tempCanvas = document.createElement('canvas');
+let tempCtx = tempCanvas.getContext('2d');
+tempCanvas.width = w;
+tempCanvas.height = h;
 
-    submitBtn.addEventListener('click', checkGuess);
-    guessInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') checkGuess();
-    });
+tempCtx.imageSmoothingEnabled = false;
+tempCtx.drawImage(currentImage, 0, 0, w, h);
+ctx.drawImage(tempCanvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
+}
 
-    hintBtn.addEventListener('click', () => {
-        if (!isAnswered && currentStage < 4) {
-            if (score < 10) {
-                message.textContent = translations[currentLang].noPointsMsg;
-                return;
-            }
-            message.textContent = "";
-            score = Math.max(0, score - 10);
-            scoreDisplay.textContent = translations[currentLang].score + score;
+function updateStatusText() {
+let earnedReward = Math.max(5, 20 - (currentStage - 1) * 5);
+if (currentLang === 'tr') {
+statusDisplay.textContent = Netlik: Aşama${currentStage}/4 | Ödül: latex
+{earnedReward} Puan`; } else { statusDisplay.textContent = `Clarity: Stage 
 
-            currentStage++;
-            let pSize = 12 - (currentStage * 2);
-            drawImagePixelated(Math.max(3, pSize));
-            updateStatusText();
-        }
-    });
+{currentStage}/4 | Reward: ${earnedReward} Pts;
+}
+}
 
-    letterHintBtn.addEventListener('click', () => {
-        if (isAnswered || remainingLetterHints <= 0) return;
+function removeTurkishChars(str) {
+return str
+.replace(/ğ/g, 'g')
+.replace(/ü/g, 'u')
+.replace(/ş/g, 's')
+.replace(/ı/g, 'i')
+.replace(/i̇/g, 'i')
+.replace(/ö/g, 'o')
+.replace(/ç/g, 'c');
+}
 
-        if (score < 2) {
-            message.textContent = translations[currentLang].noPointsMsg;
-            return;
-        }
-        message.textContent = "";
+function cleanTeamName(name) {
+return name.toLowerCase()
+.trim()
+.replace(/\s+(sk|fk|spor|united|city|town)`$/, '')
+.replace(/(sk|fk|spor|united|city|town)$/, '');
+}
 
-        if (!isHintAreaShown) {
-            score = Math.max(0, score - 2);
-            scoreDisplay.textContent = translations[currentLang].score + score;
-            isHintAreaShown = true;
-            hintLettersDisplay.classList.remove('hidden');
-            remainingLetterHints--;
-            updateLetterHintButtonState();
-            return;
-        }
+function checkGuess() {
+if (isAnswered) return;
+let userGuess = guessInput.value.toLowerCase().trim();
+let targetName = shuffledTeams[currentIndex].name.toLowerCase();
 
-        let targetName = shuffledTeams[currentIndex].name;
-        let totalLetters = targetName.replace(/\s/g, '').length;
-        
-        let currentlyRevealed = 0;
-        revealedMaskStructure.forEach(wordArr => {
-            wordArr.forEach(char => {
-                if (char !== '_') currentlyRevealed++;
-            });
-        });
-        
-        if (currentlyRevealed >= Math.floor(totalLetters / 2)) {
-            message.textContent = translations[currentLang].maxLetterMsg;
-            return;
-        }
+const forbiddenShorts = ["gs", "fb", "bjk", "ts"];
+if (forbiddenShorts.includes(userGuess)) {
+message.textContent = translations[currentLang].shortNameMsg;
+return;
+}
 
-        let hiddenList = [];
-        let targetWords = targetName.split(' ');
-        for (let wIdx = 0; wIdx < targetWords.length; wIdx++) {
-            for (let cIdx = 0; cIdx < targetWords[wIdx].length; cIdx++) {
-                if (revealedMaskStructure[wIdx][cIdx] === '_') {
-                    hiddenList.push({ wIdx, cIdx });
-                }
-            }
-        }
+let isMatch = false;
 
-        if (hiddenList.length === 0) return;
+if (currentLang === 'tr') {
+let cleanedUser = cleanTeamName(userGuess);
+let cleanedTarget = cleanTeamName(targetName);
+if (userGuess === targetName || cleanedUser === cleanedTarget) {
+isMatch = true;
+}
+} else {
+let normalizedUser = removeTurkishChars(userGuess);
+let normalizedTarget = removeTurkishChars(targetName);
+let cleanedUser = cleanTeamName(normalizedUser);
+let cleanedTarget = cleanTeamName(normalizedTarget);
+if (normalizedUser === normalizedTarget || cleanedUser === cleanedTarget) {
+isMatch = true;
+}
+}
 
-        score = Math.max(0, score - 2);
-        scoreDisplay.textContent = translations[currentLang].score + score;
+let earnedPoints = Math.max(5, 20 - (currentStage - 1) * 5);
 
-        let randomChoice = hiddenList[Math.floor(Math.random() * hiddenList.length)];
-        revealedMaskStructure[randomChoice.wIdx][randomChoice.cIdx] = targetWords[randomChoice.wIdx][randomChoice.cIdx];
-        updateHintLettersDisplay();
+if (isMatch) {
+isAnswered = true;
+score += earnedPoints;
+streak += 1;
+correctCount++;
+scoreDisplay.textContent = translations[currentLang].score + score;
+streakDisplay.textContent = translations[currentLang].streak + streak;
+message.textContent = translations[currentLang].correctMsg;
 
-        remainingLetterHints--;
-        updateLetterHintButtonState();
-    });
+let targetWords = shuffledTeams[currentIndex].name.split(' ');
+revealedMaskStructure = targetWords.map(w => w.split(''));
+hintLettersDisplay.classList.remove('hidden');
+updateHintLettersDisplay();
+drawImagePixelated(1);
 
-    skipBtn.addEventListener('click', () => {
-        if (isAnswered) return;
-        streak = 0;
-        skippedCount++;
-        streakDisplay.textContent = translations[currentLang].streak + streak;
-        currentIndex++;
-        loadTeam();
-    });
+currentIndex++;
+setTimeout(loadTeam, 2000);
+} else {
+wrongCount++;
+message.textContent = translations[currentLang].wrongMsg;
+}
+}
 
-    leagueSelect.addEventListener('change', () => {
-        initGame();
-    });
+submitBtn.addEventListener('click', checkGuess);
+guessInput.addEventListener('keypress', (e) => {
+if (e.key === 'Enter') checkGuess();
+});
 
-    statsRestartBtn.addEventListener('click', () => {
-        initGame();
-    });
+hintBtn.addEventListener('click', () => {
+if (!isAnswered && currentStage < 4) {
+if (score < 10) {
+message.textContent = translations[currentLang].noPointsMsg;
+return;
+}
+message.textContent = "";
+score = Math.max(0, score - 10);
+scoreDisplay.textContent = translations[currentLang].score + score;
 
-    langToggle.addEventListener('click', () => {
-        currentLang = currentLang === 'tr' ? 'en' : 'tr';
-        updateTexts();
-    });
+currentStage++;
+let pSize = 12 - (currentStage * 2);
+drawImagePixelated(Math.max(3, pSize));
+updateStatusText();
+}
+});
 
-    function updateTexts() {
-        let t = translations[currentLang];
-        scoreDisplay.textContent = t.score + score;
-        streakDisplay.textContent = t.streak + streak;
-        guessInput.placeholder = t.placeholder;
-        submitBtn.textContent = t.submit;
-        hintBtn.textContent = t.hint;
-        updateLetterHintButtonState();
-        skipBtn.textContent = t.skip;
-        statsRestartBtn.textContent = t.restart;
-        langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
-        
-        statsTitle.textContent = t.statsTitle;
-        statCorrectLabel.textContent = t.correctLabel;
-        statWrongLabel.textContent = t.wrongLabel;
-        statPassLabel.textContent = t.passLabel;
-        statAccuracyLabel.textContent = t.accuracyLabel;
-        statFinalScoreLabel.textContent = t.finalScoreLabel;
+letterHintBtn.addEventListener('click', () => {
+if (isAnswered || remainingLetterHints <= 0) return;
 
-        if (currentIndex < shuffledTeams.length) updateStatusText();
-    }
+if (score < 2) {
+message.textContent = translations[currentLang].noPointsMsg;
+return;
+}
+message.textContent = "";
 
-    initGame();
+if (!isHintAreaShown) {
+score = Math.max(0, score - 2);
+scoreDisplay.textContent = translations[currentLang].score + score;
+isHintAreaShown = true;
+hintLettersDisplay.classList.remove('hidden');
+remainingLetterHints--;
+updateLetterHintButtonState();
+return;
+}
+
+let targetName = shuffledTeams[currentIndex].name;
+let totalLetters = targetName.replace(/\s/g, '').length;
+
+let currentlyRevealed = 0;
+revealedMaskStructure.forEach(wordArr => {
+wordArr.forEach(char => {
+if (char !== '_') currentlyRevealed++;
+});
+});
+
+if (currentlyRevealed >= Math.floor(totalLetters / 2)) {
+message.textContent = translations[currentLang].maxLetterMsg;
+return;
+}
+
+let hiddenList = [];
+let targetWords = targetName.split(' ');
+for (let wIdx = 0; wIdx < targetWords.length; wIdx++) {
+for (let cIdx = 0; cIdx < targetWords[wIdx].length; cIdx++) {
+if (revealedMaskStructure[wIdx][cIdx] === '_') {
+hiddenList.push({ wIdx, cIdx });
+}
+}
+}
+
+if (hiddenList.length === 0) return;
+
+score = Math.max(0, score - 2);
+scoreDisplay.textContent = translations[currentLang].score + score;
+
+let randomChoice = hiddenList[Math.floor(Math.random() * hiddenList.length)];
+revealedMaskStructure[randomChoice.wIdx][randomChoice.cIdx] = targetWords[randomChoice.wIdx][randomChoice.cIdx];
+updateHintLettersDisplay();
+
+remainingLetterHints--;
+updateLetterHintButtonState();
+});
+
+skipBtn.addEventListener('click', () => {
+if (isAnswered) return;
+streak = 0;
+skippedCount++;
+streakDisplay.textContent = translations[currentLang].streak + streak;
+currentIndex++;
+loadTeam();
+});
+
+leagueSelect.addEventListener('change', () => {
+initGame();
+});
+
+statsRestartBtn.addEventListener('click', () => {
+initGame();
+});
+
+langToggle.addEventListener('click', () => {
+currentLang = currentLang === 'tr' ? 'en' : 'tr';
+updateTexts();
+});
+
+function updateTexts() {
+let t = translations[currentLang];
+scoreDisplay.textContent = t.score + score;
+streakDisplay.textContent = t.streak + streak;
+guessInput.placeholder = t.placeholder;
+submitBtn.textContent = t.submit;
+hintBtn.textContent = t.hint;
+updateLetterHintButtonState();
+skipBtn.textContent = t.skip;
+statsRestartBtn.textContent = t.restart;
+langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
+
+statsTitle.textContent = t.statsTitle;
+statCorrectLabel.textContent = t.correctLabel;
+statWrongLabel.textContent = t.wrongLabel;
+statPassLabel.textContent = t.passLabel;
+statAccuracyLabel.textContent = t.accuracyLabel;
+statFinalScoreLabel.textContent = t.finalScoreLabel;
+
+if (currentIndex < shuffledTeams.length) updateStatusText();
+}
+
+initGame();
 </script>
 
 </body>
