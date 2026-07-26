@@ -72,6 +72,23 @@
             font-size: 0.95rem;
         }
 
+        .league-select-wrapper {
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        .league-select {
+            width: 100%;
+            padding: 6px 10px;
+            font-size: 0.95rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f8f8f8;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+        }
+
         .canvas-wrapper {
             position: relative;
             display: flex;
@@ -90,13 +107,20 @@
             border-radius: 6px;
         }
 
-        .hint-letters {
+        .hint-letters-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin: 6px 0;
+            min-height: 24px;
+        }
+
+        .hint-word-row {
             font-family: monospace;
             font-size: 1.2rem;
             letter-spacing: 4px;
-            margin: 6px 0;
             color: #444;
-            min-height: 24px;
             font-weight: bold;
         }
 
@@ -216,10 +240,17 @@
             <button class="lang-btn" id="langToggle">EN 🇬🇧</button>
         </div>
         
+        <div class="league-select-wrapper">
+            <select id="leagueSelect" class="league-select">
+                <option value="superlig">🇹🇷 Süper Lig</option>
+                <option value="premierleague">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier Lig</option>
+                <option value="all">🌍 Tüm Ligler (Karışık)</option>
+            </select>
+        </div>
+
         <div class="info-text" id="scoreDisplay">Puan: 0</div>
         <div class="info-text" id="streakDisplay">Seri: 0</div>
         <div class="info-text" id="progressDisplay">1 / 18</div>
-        <div class="info-text" id="leagueDisplay">🇹🇷 Süper Lig</div>
 
         <!-- Canvas Alanı -->
         <div class="canvas-wrapper" id="canvasWrapper">
@@ -229,7 +260,7 @@
         <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 | Ödül: 20 Puan</div>
         
         <!-- Harf İpucu Görüntüleme Alanı (Başlangıçta gizli) -->
-        <div class="hint-letters hidden" id="hintLettersDisplay">_ _ _ _</div>
+        <div class="hint-letters-container hidden" id="hintLettersDisplay"></div>
 
         <div class="input-row" id="inputSection">
             <input type="text" id="guessInput" placeholder="Takım adını yazın..." autocomplete="off">
@@ -276,7 +307,6 @@
         tr: {
             score: "Puan: ",
             streak: "Seri: ",
-            league: "🇹🇷 Süper Lig",
             placeholder: "Takım adını yazın...",
             submit: "Tahmin Et",
             hint: "Netleştir (-10 Puan)",
@@ -299,7 +329,6 @@
         en: {
             score: "Score: ",
             streak: "Streak: ",
-            league: "🇹🇷 Turkish Super League",
             placeholder: "Enter team name...",
             submit: "Guess",
             hint: "Sharpen (-10 Pts)",
@@ -323,26 +352,50 @@
 
     let currentLang = 'tr';
 
-    const teams = [
-        { name: "beşiktaş", file: "bjk.png" },
-        { name: "fenerbahçe", file: "fb.png" },
-        { name: "galatasaray", file: "gs.png" },
-        { name: "trabzonspor", file: "ts.png" },
-        { name: "başakşehir", file: "başakşehir.png" },
-        { name: "samsunspor", file: "samsun.png" },
-        { name: "göztepe", file: "göztepe.png" },
-        { name: "konyaspor", file: "konya.png" },
-        { name: "alanyaspor", file: "alanyaspor.png" },
-        { name: "amed sk", file: "amedsk.png" },
-        { name: "çaykur rizespor", file: "caykurrizespor.png" },
-        { name: "çorum fk", file: "corumfk.png" },
-        { name: "erzurumspor", file: "erzurumspor.png" },
-        { name: "eyüpspor", file: "eyupspor.png" },
-        { name: "gaziantep fk", file: "gaziantepfk.png" },
-        { name: "gençlerbirliği", file: "genclerbirligi.png" },
-        { name: "kasımpaşa", file: "kasimpaşa.png" },
-        { name: "kocaeli", file: "kocaeli.png" }
-    ];
+    const leagues = {
+        superlig: [
+            { name: "beşiktaş", file: "bjk.png" },
+            { name: "fenerbahçe", file: "fb.png" },
+            { name: "galatasaray", file: "gs.png" },
+            { name: "trabzonspor", file: "ts.png" },
+            { name: "başakşehir", file: "başakşehir.png" },
+            { name: "samsunspor", file: "samsun.png" },
+            { name: "göztepe", file: "göztepe.png" },
+            { name: "konyaspor", file: "konya.png" },
+            { name: "alanyaspor", file: "alanyaspor.png" },
+            { name: "amed sk", file: "amedsk.png" },
+            { name: "çaykur rizespor", file: "caykurrizespor.png" },
+            { name: "çorum fk", file: "corumfk.png" },
+            { name: "erzurumspor", file: "erzurumspor.png" },
+            { name: "eyüpspor", file: "eyupspor.png" },
+            { name: "gaziantep fk", file: "gaziantepfk.png" },
+            { name: "gençlerbirliği", file: "genclerbirligi.png" },
+            { name: "kasımpaşa", file: "kasimpaşa.png" },
+            { name: "kocaeli", file: "kocaeli.png" }
+        ],
+        premierleague: [
+            { name: "bournemouth", file: "bournemouth.png" },
+            { name: "arsenal", file: "arsenal.png" },
+            { name: "aston villa", file: "astonvilla.png" },
+            { name: "brentford", file: "brentford.png" },
+            { name: "brighton", file: "brighton.png" },
+            { name: "chelsea", file: "chelsea.png" },
+            { name: "coventry", file: "coventry.png" },
+            { name: "crystal palace", file: "crystalpalace.png" },
+            { name: "everton", file: "everton.png" },
+            { name: "fulham", file: "fulham.png" },
+            { name: "hull city", file: "hullcity.png" },
+            { name: "ipswich town", file: "ipswich.png" },
+            { name: "leeds united", file: "leeds.png" },
+            { name: "liverpool", file: "liverpool.png" },
+            { name: "manchester city", file: "mancity.png" },
+            { name: "manchester united", file: "manutd.png" },
+            { name: "newcastle", file: "newcastle.png" },
+            { name: "nottingham forest", file: "nottingham.png" },
+            { name: "sunderland", file: "sunderland.png" },
+            { name: "tottenham", file: "tottenham.png" }
+        ]
+    };
 
     let score = 0;
     let streak = 0;
@@ -353,7 +406,7 @@
     let currentIndex = 0;
     let currentStage = 1;
     let isAnswered = false;
-    let revealedMask = [];
+    let revealedMaskStructure = []; // Kelime bazlı maske yapısı
     let remainingLetterHints = 5;
     let isHintAreaShown = false;
     
@@ -369,7 +422,7 @@
     const scoreDisplay = document.getElementById('scoreDisplay');
     const streakDisplay = document.getElementById('streakDisplay');
     const progressDisplay = document.getElementById('progressDisplay');
-    const leagueDisplay = document.getElementById('leagueDisplay');
+    const leagueSelect = document.getElementById('leagueSelect');
     const statusDisplay = document.getElementById('statusDisplay');
     const hintLettersDisplay = document.getElementById('hintLettersDisplay');
     const langToggle = document.getElementById('langToggle');
@@ -404,7 +457,16 @@
     }
 
     function initGame() {
-        shuffledTeams = shuffleArray(teams);
+        let selectedLeague = leagueSelect.value;
+        let teamPool = [];
+
+        if (selectedLeague === 'all') {
+            teamPool = [...leagues.superlig, ...leagues.premierleague];
+        } else {
+            teamPool = leagues[selectedLeague] || leagues.superlig;
+        }
+
+        shuffledTeams = shuffleArray(teamPool);
         currentIndex = 0;
         score = 0;
         streak = 0;
@@ -443,7 +505,8 @@
         progressDisplay.textContent = `${currentIndex + 1} / ${shuffledTeams.length}`;
         
         let targetName = shuffledTeams[currentIndex].name;
-        revealedMask = targetName.split('').map(char => char === ' ' ? ' ' : '_');
+        // Kelime kelime maske oluşturma (Örn: "manchester united" -> [['m','a','n',...], ['u','n','i',...]])
+        revealedMaskStructure = targetName.split(' ').map(word => word.split('').map(() => '_'));
         updateHintLettersDisplay();
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -487,7 +550,13 @@
     }
 
     function updateHintLettersDisplay() {
-        hintLettersDisplay.textContent = revealedMask.join(' ');
+        hintLettersDisplay.innerHTML = '';
+        revealedMaskStructure.forEach(wordArr => {
+            let rowDiv = document.createElement('div');
+            rowDiv.className = 'hint-word-row';
+            rowDiv.textContent = wordArr.join(' ');
+            hintLettersDisplay.appendChild(rowDiv);
+        });
     }
 
     function updateLetterHintButtonState() {
@@ -546,8 +615,8 @@
     function cleanTeamName(name) {
         return name.toLowerCase()
             .trim()
-            .replace(/\s+(sk|fk|spor)$/, '')
-            .replace(/(sk|fk|spor)$/, '');
+            .replace(/\s+(sk|fk|spor|united|city|town)$/, '')
+            .replace(/(sk|fk|spor|united|city|town)$/, '');
     }
 
     function checkGuess() {
@@ -590,7 +659,8 @@
             streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
             
-            revealedMask = shuffledTeams[currentIndex].name.split('');
+            let targetWords = shuffledTeams[currentIndex].name.split(' ');
+            revealedMaskStructure = targetWords.map(w => w.split(''));
             hintLettersDisplay.classList.remove('hidden');
             updateHintLettersDisplay();
             drawImagePixelated(1);
@@ -634,7 +704,6 @@
         }
         message.textContent = "";
 
-        // Eğer ilk kez basılıyorsa sadece kutucukları aç (harf açma)
         if (!isHintAreaShown) {
             score = Math.max(0, score - 2);
             scoreDisplay.textContent = translations[currentLang].score + score;
@@ -647,27 +716,37 @@
 
         let targetName = shuffledTeams[currentIndex].name;
         let totalLetters = targetName.replace(/\s/g, '').length;
-        let currentlyRevealed = revealedMask.filter(c => c !== '_' && c !== ' ').length;
+        
+        let currentlyRevealed = 0;
+        revealedMaskStructure.forEach(wordArr => {
+            wordArr.forEach(char => {
+                if (char !== '_') currentlyRevealed++;
+            });
+        });
         
         if (currentlyRevealed >= Math.floor(totalLetters / 2)) {
             message.textContent = translations[currentLang].maxLetterMsg;
             return;
         }
 
-        let hiddenIndices = [];
-        for (let i = 0; i < targetName.length; i++) {
-            if (revealedMask[i] === '_') {
-                hiddenIndices.push(i);
+        // Gizli harflerin yerlerini bul
+        let hiddenList = [];
+        let targetWords = targetName.split(' ');
+        for (let wIdx = 0; wIdx < targetWords.length; wIdx++) {
+            for (let cIdx = 0; cIdx < targetWords[wIdx].length; cIdx++) {
+                if (revealedMaskStructure[wIdx][cIdx] === '_') {
+                    hiddenList.push({ wIdx, cIdx });
+                }
             }
         }
 
-        if (hiddenIndices.length === 0) return;
+        if (hiddenList.length === 0) return;
 
         score = Math.max(0, score - 2);
         scoreDisplay.textContent = translations[currentLang].score + score;
 
-        let randomIndex = hiddenIndices[Math.floor(Math.random() * hiddenIndices.length)];
-        revealedMask[randomIndex] = targetName[randomIndex];
+        let randomChoice = hiddenList[Math.floor(Math.random() * hiddenList.length)];
+        revealedMaskStructure[randomChoice.wIdx][randomChoice.cIdx] = targetWords[randomChoice.wIdx][randomChoice.cIdx];
         updateHintLettersDisplay();
 
         remainingLetterHints--;
@@ -683,6 +762,10 @@
         loadTeam();
     });
 
+    leagueSelect.addEventListener('change', () => {
+        initGame();
+    });
+
     statsRestartBtn.addEventListener('click', () => {
         initGame();
     });
@@ -696,7 +779,6 @@
         let t = translations[currentLang];
         scoreDisplay.textContent = t.score + score;
         streakDisplay.textContent = t.streak + streak;
-        leagueDisplay.textContent = t.league;
         guessInput.placeholder = t.placeholder;
         submitBtn.textContent = t.submit;
         hintBtn.textContent = t.hint;
