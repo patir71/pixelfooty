@@ -90,23 +90,6 @@
             border-radius: 6px;
         }
 
-        .center-restart-btn {
-            position: absolute;
-            background: #dcfce7;
-            border: 2px solid #bbf7d0;
-            color: #166534;
-            padding: 10px 16px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .center-restart-btn:hover {
-            background: #bbf7d0;
-        }
-
         .hint-letters {
             font-family: monospace;
             font-size: 1.2rem;
@@ -169,6 +152,55 @@
             font-size: 0.95rem;
         }
 
+        .stats-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+
+        .stats-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #475569;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .restart-game-btn {
+            width: 100%;
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .restart-game-btn:hover {
+            background: #16a34a;
+        }
+
         .hidden {
             display: none !important;
         }
@@ -189,10 +221,9 @@
         <div class="info-text" id="progressDisplay">1 / 18</div>
         <div class="info-text" id="leagueDisplay">🇹🇷 Süper Lig</div>
 
-        <!-- Canvas ve tam ortasındaki Yeniden Başla butonu -->
-        <div class="canvas-wrapper">
+        <!-- Canvas Alanı -->
+        <div class="canvas-wrapper" id="canvasWrapper">
             <canvas id="pixelCanvas" width="256" height="256"></canvas>
-            <button id="restartBtn" class="center-restart-btn hidden">Yeniden Başla</button>
         </div>
 
         <div class="info-text" id="statusDisplay">Netlik: Aşama 1/4 | Ödül: 20 Puan</div>
@@ -212,6 +243,28 @@
         </div>
 
         <div class="message" id="message"></div>
+
+        <!-- Oyun Bitti İstatistik Kartı -->
+        <div id="statsSection" class="stats-card hidden">
+            <div class="stats-title" id="statsTitle">Oyun Özeti & İstatistikler 📊</div>
+            <div class="stat-item">
+                <span id="statCorrectLabel">Doğru Sayısı:</span>
+                <span class="stat-value" id="statCorrectVal">0</span>
+            </div>
+            <div class="stat-item">
+                <span id="statPassLabel">Pas Geçilen:</span>
+                <span class="stat-value" id="statPassVal">0</span>
+            </div>
+            <div class="stat-item">
+                <span id="statAccuracyLabel">Doğruluk Oranı:</span>
+                <span class="stat-value" id="statAccuracyVal">%0</span>
+            </div>
+            <div class="stat-item">
+                <span id="statFinalScoreLabel">Toplam Puan:</span>
+                <span class="stat-value" id="statFinalScoreVal">0</span>
+            </div>
+            <button id="statsRestartBtn" class="restart-game-btn">Yeniden Başla</button>
+        </div>
     </div>
 
 <script>
@@ -231,7 +284,12 @@
             shortNameMsg: "Lütfen tam olarak tahmin edin! ⚠️",
             noPointsMsg: "Yeterli puanın yok! ⚠️",
             maxLetterMsg: "Daha fazla harf açamazsın! ⚠️",
-            gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆"
+            gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆",
+            statsTitle: "Oyun Özeti & İstatistikler 📊",
+            correctLabel: "Doğru Sayısı:",
+            passLabel: "Pas Geçilen:",
+            accuracyLabel: "Doğruluk Oranı:",
+            finalScoreLabel: "Toplam Puan:"
         },
         en: {
             score: "Score: ",
@@ -248,7 +306,12 @@
             shortNameMsg: "Please guess properly! ⚠️",
             noPointsMsg: "Not enough points! ⚠️",
             maxLetterMsg: "Cannot reveal more letters! ⚠️",
-            gameOver: "Congrats! You finished all teams! 🏆"
+            gameOver: "Congrats! You finished all teams! 🏆",
+            statsTitle: "Game Summary & Stats 📊",
+            correctLabel: "Correct Count:",
+            passLabel: "Skipped:",
+            accuracyLabel: "Accuracy Rate:",
+            finalScoreLabel: "Total Score:"
         }
     };
 
@@ -277,6 +340,8 @@
 
     let score = 0;
     let streak = 0;
+    let correctCount = 0;
+    let skippedCount = 0;
     let shuffledTeams = [];
     let currentIndex = 0;
     let currentStage = 1;
@@ -291,7 +356,6 @@
     const hintBtn = document.getElementById('hintBtn');
     const letterHintBtn = document.getElementById('letterHintBtn');
     const skipBtn = document.getElementById('skipBtn');
-    const restartBtn = document.getElementById('restartBtn');
     const message = document.getElementById('message');
     
     const scoreDisplay = document.getElementById('scoreDisplay');
@@ -304,6 +368,19 @@
 
     const inputSection = document.getElementById('inputSection');
     const actionSection = document.getElementById('actionSection');
+    const canvasWrapper = document.getElementById('canvasWrapper');
+    const statsSection = document.getElementById('statsSection');
+
+    const statsTitle = document.getElementById('statsTitle');
+    const statCorrectLabel = document.getElementById('statCorrectLabel');
+    const statPassLabel = document.getElementById('statPassLabel');
+    const statAccuracyLabel = document.getElementById('statAccuracyLabel');
+    const statFinalScoreLabel = document.getElementById('statFinalScoreLabel');
+    const statCorrectVal = document.getElementById('statCorrectVal');
+    const statPassVal = document.getElementById('statPassVal');
+    const statAccuracyVal = document.getElementById('statAccuracyVal');
+    const statFinalScoreVal = document.getElementById('statFinalScoreVal');
+    const statsRestartBtn = document.getElementById('statsRestartBtn');
 
     let currentImage = new Image();
 
@@ -321,29 +398,29 @@
         currentIndex = 0;
         score = 0;
         streak = 0;
+        correctCount = 0;
+        skippedCount = 0;
+        
         scoreDisplay.textContent = translations[currentLang].score + score;
         streakDisplay.textContent = translations[currentLang].streak + streak;
+        
+        statsSection.classList.add('hidden');
+        canvasWrapper.classList.remove('hidden');
+        inputSection.classList.remove('hidden');
+        actionSection.classList.remove('hidden');
+        progressDisplay.classList.remove('hidden');
+        statusDisplay.classList.remove('hidden');
+        hintLettersDisplay.classList.remove('hidden');
+
         loadTeam();
     }
 
     function loadTeam() {
         if (currentIndex >= shuffledTeams.length) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            message.textContent = translations[currentLang].gameOver;
-            inputSection.classList.add('hidden');
-            actionSection.classList.add('hidden');
-            progressDisplay.classList.add('hidden');
-            statusDisplay.textContent = "";
-            hintLettersDisplay.textContent = "";
-            restartBtn.classList.remove('hidden');
+            showGameOverStats();
             return;
         }
         
-        inputSection.classList.remove('hidden');
-        actionSection.classList.remove('hidden');
-        progressDisplay.classList.remove('hidden');
-        restartBtn.classList.add('hidden');
-
         isAnswered = false;
         message.textContent = "";
         guessInput.value = "";
@@ -373,6 +450,27 @@
             ctx.textAlign = "center";
             ctx.fillText("Logo Bulunamadı", canvas.width / 2, canvas.height / 2);
         };
+    }
+
+    function showGameOverStats() {
+        canvasWrapper.classList.add('hidden');
+        inputSection.classList.add('hidden');
+        actionSection.classList.add('hidden');
+        progressDisplay.classList.add('hidden');
+        statusDisplay.classList.add('hidden');
+        hintLettersDisplay.classList.add('hidden');
+        
+        message.textContent = translations[currentLang].gameOver;
+
+        let totalPlayed = shuffledTeams.length;
+        let accuracy = totalPlayed > 0 ? Math.round((correctCount / totalPlayed) * 100) : 0;
+
+        statCorrectVal.textContent = correctCount;
+        statPassVal.textContent = skippedCount;
+        statAccuracyVal.textContent = `%${accuracy}`;
+        statFinalScoreVal.textContent = score;
+
+        statsSection.classList.remove('hidden');
     }
 
     function updateHintLettersDisplay() {
@@ -474,6 +572,7 @@
             isAnswered = true;
             score += earnedPoints;
             streak += 1;
+            correctCount++;
             scoreDisplay.textContent = translations[currentLang].score + score;
             streakDisplay.textContent = translations[currentLang].streak + streak;
             message.textContent = translations[currentLang].correctMsg;
@@ -552,12 +651,13 @@
     skipBtn.addEventListener('click', () => {
         if (isAnswered) return;
         streak = 0;
+        skippedCount++;
         streakDisplay.textContent = translations[currentLang].streak + streak;
         currentIndex++;
         loadTeam();
     });
 
-    restartBtn.addEventListener('click', () => {
+    statsRestartBtn.addEventListener('click', () => {
         initGame();
     });
 
@@ -576,8 +676,15 @@
         hintBtn.textContent = t.hint;
         updateLetterHintButtonState();
         skipBtn.textContent = t.skip;
-        restartBtn.textContent = t.restart;
+        statsRestartBtn.textContent = t.restart;
         langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
+        
+        statsTitle.textContent = t.statsTitle;
+        statCorrectLabel.textContent = t.correctLabel;
+        statPassLabel.textContent = t.passLabel;
+        statAccuracyLabel.textContent = t.accuracyLabel;
+        statFinalScoreLabel.textContent = t.finalScoreLabel;
+
         if (currentIndex < shuffledTeams.length) updateStatusText();
     }
 
