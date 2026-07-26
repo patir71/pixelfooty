@@ -252,6 +252,10 @@
                 <span class="stat-value" id="statCorrectVal">0</span>
             </div>
             <div class="stat-item">
+                <span id="statWrongLabel">Yanlış Tahmin:</span>
+                <span class="stat-value" id="statWrongVal">0</span>
+            </div>
+            <div class="stat-item">
                 <span id="statPassLabel">Pas Geçilen:</span>
                 <span class="stat-value" id="statPassVal">0</span>
             </div>
@@ -287,6 +291,7 @@
             gameOver: "Tebrikler! Tüm takımları bitirdin! 🏆",
             statsTitle: "Oyun Özeti & İstatistikler 📊",
             correctLabel: "Doğru Sayısı:",
+            wrongLabel: "Yanlış Tahmin:",
             passLabel: "Pas Geçilen:",
             accuracyLabel: "Doğruluk Oranı:",
             finalScoreLabel: "Toplam Puan:"
@@ -309,6 +314,7 @@
             gameOver: "Congrats! You finished all teams! 🏆",
             statsTitle: "Game Summary & Stats 📊",
             correctLabel: "Correct Count:",
+            wrongLabel: "Wrong Guesses:",
             passLabel: "Skipped:",
             accuracyLabel: "Accuracy Rate:",
             finalScoreLabel: "Total Score:"
@@ -341,6 +347,7 @@
     let score = 0;
     let streak = 0;
     let correctCount = 0;
+    let wrongCount = 0;
     let skippedCount = 0;
     let shuffledTeams = [];
     let currentIndex = 0;
@@ -373,10 +380,12 @@
 
     const statsTitle = document.getElementById('statsTitle');
     const statCorrectLabel = document.getElementById('statCorrectLabel');
+    const statWrongLabel = document.getElementById('statWrongLabel');
     const statPassLabel = document.getElementById('statPassLabel');
     const statAccuracyLabel = document.getElementById('statAccuracyLabel');
     const statFinalScoreLabel = document.getElementById('statFinalScoreLabel');
     const statCorrectVal = document.getElementById('statCorrectVal');
+    const statWrongVal = document.getElementById('statWrongVal');
     const statPassVal = document.getElementById('statPassVal');
     const statAccuracyVal = document.getElementById('statAccuracyVal');
     const statFinalScoreVal = document.getElementById('statFinalScoreVal');
@@ -399,6 +408,7 @@
         score = 0;
         streak = 0;
         correctCount = 0;
+        wrongCount = 0;
         skippedCount = 0;
         
         scoreDisplay.textContent = translations[currentLang].score + score;
@@ -462,10 +472,11 @@
         
         message.textContent = translations[currentLang].gameOver;
 
-        let totalPlayed = shuffledTeams.length;
-        let accuracy = totalPlayed > 0 ? Math.round((correctCount / totalPlayed) * 100) : 0;
+        let totalAttempts = correctCount + wrongCount;
+        let accuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
 
         statCorrectVal.textContent = correctCount;
+        statWrongVal.textContent = wrongCount;
         statPassVal.textContent = skippedCount;
         statAccuracyVal.textContent = `%${accuracy}`;
         statFinalScoreVal.textContent = score;
@@ -584,6 +595,7 @@
             currentIndex++;
             setTimeout(loadTeam, 2000);
         } else {
+            wrongCount++;
             message.textContent = translations[currentLang].wrongMsg;
         }
     }
@@ -681,6 +693,7 @@
         
         statsTitle.textContent = t.statsTitle;
         statCorrectLabel.textContent = t.correctLabel;
+        statWrongLabel.textContent = t.wrongLabel;
         statPassLabel.textContent = t.passLabel;
         statAccuracyLabel.textContent = t.accuracyLabel;
         statFinalScoreLabel.textContent = t.finalScoreLabel;
