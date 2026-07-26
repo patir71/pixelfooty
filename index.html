@@ -240,9 +240,9 @@
         
         <div class="league-select-wrapper">
             <select id="leagueSelect" class="league-select">
-                <option value="superlig">🇹🇷 Süper Lig</option>
-                <option value="premierleague">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier Lig</option>
-                <option value="all">🌍 Tüm Ligler (Karışık)</option>
+                <option value="superlig" id="superLigOpt">🇹🇷 Süper Lig</option>
+                <option value="premierleague" id="premierOpt">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier Lig</option>
+                <option value="all" id="allOpt">🌍 Tüm Ligler (Karışık)</option>
             </select>
         </div>
 
@@ -319,7 +319,10 @@
             wrongLabel: "Yanlış Tahmin:",
             passLabel: "Pas Geçilen:",
             accuracyLabel: "Doğruluk Oranı:",
-            finalScoreLabel: "Toplam Puan:"
+            finalScoreLabel: "Toplam Puan:",
+            superLigOpt: "🇹🇷 Süper Lig",
+            premierOpt: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier Lig",
+            allOpt: "🌍 Tüm Ligler (Karışık)"
         },
         en: {
             score: "Score: ",
@@ -341,7 +344,10 @@
             wrongLabel: "Wrong Guesses:",
             passLabel: "Skipped:",
             accuracyLabel: "Accuracy Rate:",
-            finalScoreLabel: "Total Score:"
+            finalScoreLabel: "Total Score:",
+            superLigOpt: "🇹🇷 Turkish Super League",
+            premierOpt: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League",
+            allOpt: "🌍 All Leagues (Mixed)"
         }
     };
 
@@ -780,6 +786,10 @@
         statsRestartBtn.textContent = t.restart;
         langToggle.textContent = currentLang === 'tr' ? "EN 🇬🇧" : "TR 🇹🇷";
         
+        document.getElementById('superLigOpt').textContent = t.superLigOpt;
+        document.getElementById('premierOpt').textContent = t.premierOpt;
+        document.getElementById('allOpt').textContent = t.allOpt;
+
         statsTitle.textContent = t.statsTitle;
         statCorrectLabel.textContent = t.correctLabel;
         statWrongLabel.textContent = t.wrongLabel;
